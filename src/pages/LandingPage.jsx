@@ -203,7 +203,7 @@ export default function LandingPage({ onNavigate }) {
             <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
               <Zap size={14} className="text-white" />
             </div>
-            <span className="text-sm text-gray-400">© 2025 DevOps Buddy. Built for engineers.</span>
+            <span className="text-sm text-gray-400">© 2026 DevOps Buddy. Built for engineers.</span>
           </div>
           <div className="flex items-center gap-6 text-sm text-gray-500">
             <a href="#" className="hover:text-gray-300 transition-colors">Docs</a>
