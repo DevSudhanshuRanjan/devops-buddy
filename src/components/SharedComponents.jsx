@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Copy, Check, Lightbulb, AlertTriangle, XCircle, CheckCircle } from 'lucide-react';
+import { Copy, Check, Lightbulb, AlertTriangle, XCircle, CheckCircle, HelpCircle, MessageSquare } from 'lucide-react';
 
 export function CodeBlock({ code, language = 'bash' }) {
   const [copied, setCopied] = useState(false);
@@ -86,5 +86,28 @@ export function Badge({ label, variant = 'beginner' }) {
     <span className={`text-xs px-2.5 py-0.5 rounded-full border font-medium inline-block ${styles[variant] || styles.beginner}`}>
       {label}
     </span>
+  );
+}
+export function QuestionBlock({ question, placeholder = "Type your thoughts here..." }) {
+  const [value, setValue] = useState('');
+  return (
+    <div className="my-6 p-5 rounded-xl bg-indigo-900/10 border border-indigo-500/30 hover:border-indigo-500/50 transition-colors">
+      <div className="flex items-center gap-2 mb-3">
+        <HelpCircle size={18} className="text-indigo-400" />
+        <span className="text-sm font-bold text-indigo-300 uppercase tracking-wider">Thought Exercise</span>
+      </div>
+      <p className="text-gray-200 font-medium mb-4 text-[15px]">{question}</p>
+      <div className="relative">
+        <textarea
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          placeholder={placeholder}
+          className="w-full bg-[#0D1117] border border-gray-700 rounded-lg p-3 text-sm text-gray-300 min-h-[100px] focus:outline-none focus:border-indigo-500 transition-colors resize-none"
+        />
+        <div className="absolute bottom-3 right-3 flex items-center gap-2 text-[10px] text-gray-500 uppercase font-bold tracking-widest pointer-events-none">
+          <MessageSquare size={12} /> Self-Reflection
+        </div>
+      </div>
+    </div>
   );
 }

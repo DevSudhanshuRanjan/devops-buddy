@@ -28,8 +28,8 @@ export default function QuizPage({ onNavigate, quizAnswers, setQuizAnswers, quiz
     <div className="max-w-3xl mx-auto animate-[fade-in_0.3s_ease-out]">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">Module Quiz: Version Control</h1>
-        <p className="text-gray-400 text-sm">Test your knowledge across all 6 sections. Answer all 10 questions to submit.</p>
+        <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">DevOps Master Quiz</h1>
+        <p className="text-gray-400 text-sm">Test your knowledge across all modules. Answer all {quizQuestions.length} questions to submit.</p>
       </div>
 
       {/* Score Banner */}

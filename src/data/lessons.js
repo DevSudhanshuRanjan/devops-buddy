@@ -1,6 +1,11 @@
 export const modules = {
   git: {
     id: 'git', title: 'Version Control', description: 'Master Git and GitHub from beginner to advanced', icon: '🔀',
+    badges: [
+      { label: 'Git', variant: 'beginner' },
+      { label: 'GitHub', variant: 'beginner' },
+      { label: 'Beginner → Advanced', variant: 'intermediate' }
+    ],
     sections: [
       { id: 'sec1', title: 'Introduction to Version Control', lessons: [
         { id: 'l1', title: 'What is Version Control?', duration: '6 min', difficulty: 'Beginner', content: [
@@ -155,42 +160,462 @@ export const modules = {
     ]
   },
   cicd: {
-    id: 'cicd', title: 'CI/CD Pipelines', description: 'Automate your testing, build, and deployment workflows', icon: '⚙️',
+    id: 'cicd', title: 'CI/CD Pipelines', description: 'From first pipeline to automated deployments', icon: '⚙️',
+    badges: [
+      { label: 'Pipelines', variant: 'beginner' },
+      { label: 'GitHub Actions', variant: 'intermediate' },
+      { label: 'DevOps', variant: 'advanced' }
+    ],
     sections: [
-      { id: 'sec1_cicd', title: 'Introduction to CI/CD', lessons: [
-        { id: 'l_cicd1', title: 'What is CI/CD?', duration: '7 min', difficulty: 'Beginner', content: [
-          { type: 'concept', body: 'CI/CD stands for Continuous Integration and Continuous Deployment (or Delivery). It is a set of practices that automate the process of integrating code changes, running tests, and deploying applications to production safely and quickly.' },
-          { type: 'analogy', body: 'Think of CI/CD like an automated car assembly line. Instead of humans carrying parts around and manually verifying every bolt, robots assemble the car, run safety checks, and roll it out to the dealership automatically.' },
-          { type: 'diagram', title: 'The CI/CD Pipeline', content: 'CODE → PUSH → BUILD (CI) → TEST (CI) → DEPLOY (CD) → MONITOR' },
-          { type: 'summary', points: ['CI ensures code integrates without breaking existing features.', 'CD ensures verified code is deployed to users effortlessly.', 'Removes human error and slow manual processes.'] }
+      { id: 'sec1_cicd_core', title: 'The Core Philosophy', lessons: [
+        { id: 'l_cicd_intro', title: 'Introduction to CI/CD', duration: '10 min', difficulty: 'Beginner', content: [
+          { type: 'concept', body: 'CI/CD (Continuous Integration, Continuous Delivery, and Continuous Deployment) is the practice of automating the entire software release lifecycle. In the old days, software was released every few months; today, top companies like Amazon and Netflix deploy thousands of times a day using CI/CD.' },
+          { type: 'analogy', body: 'Imagine an automated restaurant. Instead of a chef manually carrying each plate, checking the temperature, and walking it to the table, there\'s a conveyor belt. The belt automatically checks the food quality, spices it, and delivers it to the customer. This conveyor belt is your "Pipeline".' },
+          { type: 'diagram', title: 'The Manual vs Automated Life', content: 'MANUAL WAY (Slow & Risky):\nWrite Code ➔ Email Zip ➔ Manual Tests ➔ SSH to Server ➔ Drag & Drop ➔ Hope it works 🙏\n\nCI/CD WAY (Fast & Secure):\nWrite Code ➔ Push to Git ➔ Automated Tests ➔ Automated Build ➔ Automated Deploy ➔ Profit! 🚀' },
+          { type: 'concept', body: 'The goal of CI/CD is simple: make software releases boring. When everything is automated, a release is no longer a stressful event — it is just another minute in the developer\'s day.' },
+          { type: 'callout', variant: 'tip', body: 'CI/CD bridges the "it works on my machine" gap by ensuring code is tested and built in a neutral environment before it ever touches production.' },
+          { type: 'code', language: 'bash', code: '# In the manual world, you might do this (BAD!):\nscp -r ./dist user@1.2.3.4:/var/www/html\n\n# In the CI/CD world, you just do this:\ngit push origin main\n# ... and the automation handles the rest.' },
+          { type: 'summary', points: ['CI/CD automates testing, building, and deployment', 'Replaces slow manual steps with rapid "Pipelines"', 'Enables high-frequency releases (multiple times a day)', 'Increases reliability by removing human error'] }
         ]},
-        { id: 'l_cicd2', title: 'Why is CI/CD Important?', duration: '5 min', difficulty: 'Beginner', content: [
-          { type: 'concept', body: 'Without CI/CD, deployment is a scary, manual event that usually happens late at night. Teams face "integration hell" where merges break everything.' },
-          { type: 'callout', variant: 'mistake', body: 'Manual deployments: Human errors, undocumented deployment steps, code sitting idle for weeks waiting for a release day.' },
-          { type: 'concept', body: 'With CI/CD, changes are merged frequently in small chunks. Bugs are caught immediately by automated tests. Deployments become boring, button-clicking routines instead of stressful events.' },
-          { type: 'callout', variant: 'tip', body: 'A good CI/CD pipeline gives developers the confidence to merge code on a Friday afternoon.' }
+        { id: 'l_cicd_ci', title: 'What is Continuous Integration', duration: '10 min', difficulty: 'Beginner', content: [
+          { type: 'concept', body: 'Continuous Integration (CI) is the practice of merging all developer code changes into a shared "main" branch multiple times a day. Each merge is automatically verified by a "build" and "test" sequence.' },
+          { type: 'concept', body: 'Why multiple times a day? Because the longer you wait to merge, the harder it becomes. This is called "Integration Hell" where code conflicts are so complex they take days to fix.' },
+          { type: 'diagram', title: 'The CI Feedback Loop', content: '1. Developer creates a branch\n2. Commits small changes\n3. Pushes to Git (GitHub/GitLab)\n4. CI Server detects push ➔ runs "npm install" + "npm test"\n5. Result: ✅ Success (Merge allowed) or ❌ Failure (Block merge)' },
+          { type: 'callout', variant: 'note', body: 'CI is not about tools; it\'s a habit. If you push code once a week, you aren\'t doing Continuous Integration, even if you have a Jenkins server running.' },
+          { type: 'concept', body: 'A typical CI process includes: Linting (checking code style), Unit Tests (checking logic), and Integration Tests (checking how parts work together).' },
+          { type: 'code', language: 'bash', code: '# Standard CI commands in a Node.js project:\nnpm ci        # Clean Install (guarantees exact dependency versions)\nnpm run lint  # Ensure code follows style guidelines\nnpm test      # Run all automated tests' },
+          { type: 'callout', variant: 'mistake', body: 'Common Mistake: Having a "red" (failing) build and ignoring it. The rule of CI is: The build is sacrosanct. If it breaks, stop everything and fix it immediately.' },
+          { type: 'summary', points: ['Integrate code daily to avoid merge conflicts', 'Automate builds and tests to catch bugs early', 'The CI server provides immediate feedback to developers', 'Never merge failing code into the main branch'] }
+        ]},
+        { id: 'l_cicd_cd', title: 'What is Continuous Deployment', duration: '12 min', difficulty: 'Beginner', content: [
+          { type: 'concept', body: 'After CI confirms the code is healthy, CD (Continuous Delivery or Deployment) ensures it reaches the user. While they sound similar, there is a critical distinction between "Delivery" and "Deployment".' },
+          { type: 'diagram', title: 'Delivery vs Deployment', content: 'CONTINUOUS DELIVERY:\nCode ➔ Test ➔ Build ➔ [ HUMAN APPROVAL ] ➔ Production\n(Safe for sensitive industries like Banking/Healthcare)\n\nCONTINUOUS DEPLOYMENT:\nCode ➔ Test ➔ Build ➔ Production (Fully Automated)\n(Standard for high-speed SaaS companies)' },
+          { type: 'concept', body: 'Step-by-step: First, the application is packaged (e.g., into a Docker image or a ZIP file). Next, it is sent to a staging environment (a copy of the real site). Finally, it moves to the production environment where real users see it.' },
+          { type: 'analogy', body: 'Think of Delivery like a delivery driver bringing a package to your door but waiting for you to sign before leaving it. Deployment is the driver dropping it in your mailbox — it\'s delivered the moment it arrives.' },
+          { type: 'concept', body: 'Real-world example: At Netflix, when a developer fixes a UI bug in the "Sign Up" page, the code is automatically deployed to millions of users globally within minutes of their peer-review being approved.' },
+          { type: 'callout', variant: 'warning', body: 'Continuous Deployment requires "Bulletproof Tests". If your tests are weak, you will automatically deploy bugs to 100% of your users.' },
+          { type: 'summary', points: ['CD bridges the gap between healthy code and working software', 'Delivery requires manual approval; Deployment is fully automatic', 'CD reduces the risk of deployment by making them small and frequent', 'Requires high trust in the automated testing suite'] }
+        ]},
+        { id: 'l_cicd_pipeline', title: 'CI/CD Pipeline Explained', duration: '12 min', difficulty: 'Beginner', content: [
+          { type: 'concept', body: 'A CI/CD Pipeline is the "road" your code travels to reach the user. It is composed of discrete phases called "Stages". If any stage fails, the pipeline stops — ensuring broken code never moves forward.' },
+          { type: 'diagram', title: 'Standard Pipeline Stages', content: '1. SOURCE: Detect code change (git push)\n2. BUILD: Compile code, install dependencies (npm install)\n3. TEST: Run Unit and Integration tests\n4. STAGING: Deploy to an internal test site\n5. PRODUCTION: Deploy to the live site' },
+          { type: 'concept', body: 'Pipelines use "Artifacts". For example, the BUILD stage might create a "dist" folder. Instead of the STAGING stage rebuilding it, it uses the "Artifact" created earlier. This ensures the exact same code tested is the one deployed.' },
+          { type: 'callout', variant: 'tip', body: '"Fail Fast": Put the fastest, cheapest tests (like Linting) at the very start of the pipeline. If they fail, you save time and server costs by not running the heavy, slow integration tests.' },
+          { type: 'code', language: 'yaml', code: '# Logical representation of pipeline stages\nstages:\n  - build\n  - test\n  - deploy_staging\n  - deploy_prod' },
+          { type: 'concept', body: 'Pipelines run in "Runners" — temporary, virtualized computers that live only for as long as your pipeline needs them. This ensures every build starts with a perfectly clean slate.' },
+          { type: 'summary', points: ['Pipelines are divided into logical stages (Build, Test, Deploy)', 'Artifacts ensure consistency between stages', '"Fail Fast" philosophy saves time and resources', 'Runners provide clean, isolated environments for every run'] }
+        ]},
+        { id: 'l_cicd_importance', title: 'Why CI/CD is Important', duration: '8 min', difficulty: 'Beginner', content: [
+          { type: 'concept', body: 'Why go through all this trouble? Because CI/CD is the difference between a software company and a "software-enabled" company. It transforms development from a slow, artisan craft into a reliable, high-speed engineering process.' },
+          { type: 'concept', body: 'Business Value: Companies with high-performing CI/CD pipelines have 208x more frequent deployments and 2604x faster lead time from commit to deploy than those without (State of DevOps Report).' },
+          { type: 'concept', body: 'Real-world scenario: An e-commerce site has a critical bug where the "Buy" button is hidden on iPhones. Without CI/CD, a fix might take days to move through "approval boards". With CI/CD, the fix can be live in 10 minutes, saving thousands in lost sales.' },
+          { type: 'callout', variant: 'tip', body: 'Deployment frequency is highly correlated with software quality. The more you deploy, the better you get at it, and the smaller your mistakes become.' },
+          { type: 'summary', points: ['Reduces "Deployment Anxiety"', 'Eliminates human error from the release process', 'Forces better coding habits through automated testing', 'Is a prerequisite for modern Cloud/Microservices architectures'] }
         ]}
       ]},
-      { id: 'sec2_cicd', title: 'Core Concepts & Workflow', lessons: [
-        { id: 'l_cicd3', title: 'Basic Workflow Explanation', duration: '8 min', difficulty: 'Intermediate', content: [
-          { type: 'concept', body: 'A pipeline is composed of stages. It starts when a developer pushes code to version control (like Git). The pipeline automatically takes over from there.' },
-          { type: 'diagram', title: 'Standard Workflow', content: '1. Commit: Dev pushes code to feature branch\n2. CI Build: Server grabs code, installs dependencies\n3. CI Test: Unit and Integration tests run\n4. Merge: PR approved and merged to main\n5. CD Deploy: Main branch is deployed to staging/prod' },
-          { type: 'concept', body: 'The pipeline acts as a merciless gatekeeper. If any step fails (e.g., tests fail, build errors), the pipeline stops immediately, and the team is notified. This prevents bad code from reaching users.' }
+      { id: 'sec2_cicd_tools', title: 'Tools & Actionable Workflows', lessons: [
+        { id: 'l_cicd_tools', title: 'Tools Overview', duration: '10 min', difficulty: 'Beginner', content: [
+          { type: 'concept', body: 'The CI/CD market is huge. While every tool accomplishes the same goal — automating your code flow — they differ in how they are hosted, their cost, and their complexity.' },
+          { type: 'diagram', title: 'The "Big Four" of CI/CD', content: '1. GITHUB ACTIONS: Best for GitHub users. Easy, cloud-hosted, YAML-based.\n2. JENKINS: The "Grandfather". Open-source, self-hosted, extremely powerful but complex.\n3. GITLAB CI/CD: Built-in to GitLab. Excellent for enterprise teams.\n4. CIRCLECI: Fast, cloud-native, great for startups.' },
+          { type: 'concept', body: 'When choosing a tool, consider: Where is your code? (If GitHub ➔ use GitHub Actions). Who will maintain it? (Jenkins requires a dedicated server admin). What is your budget? (Most have free tiers for public repos).' },
+          { type: 'callout', variant: 'tip', body: 'In 2024, GitHub Actions has become the industry standard for new projects because it requires zero server setup. You just commit a file, and it works.' },
+          { type: 'summary', points: ['GitHub Actions is the modern leader for ease-of-use', 'Jenkins is best for highly custom, on-premise needs', 'GitLab CI is the best all-in-one platform', 'Most modern tools use YAML for configuration'] }
+        ]},
+        { id: 'l_cicd_gca', title: 'GitHub Actions Basics', duration: '12 min', difficulty: 'Intermediate', content: [
+          { type: 'concept', body: 'GitHub Actions is an event-driven automation platform. This means it waits for something to happen (an event) and then runs a sequence of commands (a workflow).' },
+          { type: 'diagram', title: 'The GitHub Actions Hierarchy', content: 'WORKFLOW: The entire process (e.g., "Build and Deploy")\n  └── EVENT: What triggers it (e.g., "push", "pull_request")\n      └── JOBS: Groups of tasks (e.g., "test", "build")\n          └── STEPS: Individual commands (e.g., "npm test")' },
+          { type: 'concept', body: 'Workflows are defined in YAML files inside the `.github/workflows/` directory of your repository. GitHub automatically detects these files and runs them.' },
+          { type: 'code', language: 'yaml', code: '# The skeleton of a GitHub Action\nname: My First Workflow\non: [push]\njobs:\n  check-version:\n    runs-on: ubuntu-latest\n    steps:\n      - run: node -v' },
+          { type: 'callout', variant: 'note', body: '`runs-on: ubuntu-latest` tells GitHub to spin up a fresh Linux virtual machine for your job. You can also use `windows-latest` or `macos-latest` if needed.' },
+          { type: 'summary', points: ['Workflows live in .github/workflows/*.yml', 'Events (on:) trigger the automation', 'Jobs run on Runners (virtual machines)', 'YAML is space-sensitive — use 2 spaces for indentation!'] }
+        ]},
+        { id: 'l_cicd_first_workflow', title: 'Writing Your First Workflow', duration: '15 min', difficulty: 'Intermediate', content: [
+          { type: 'concept', body: 'Let\'s build a real-world workflow for a Node.js app. This workflow will run every time code is pushed to the "main" branch, ensuring the code actually works.' },
+          { type: 'code', language: 'yaml', code: 'name: NodeJS CI\n\non:\n  push:\n    branches: [ main ]\n\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - name: Checkout Code\n        uses: actions/checkout@v4\n\n      - name: Setup Node\n        uses: actions/setup-node@v4\n        with:\n          node-version: "20"\n\n      - name: Install & Test\n        run: |\n          npm ci\n          npm test' },
+          { type: 'concept', body: 'Breakdown of the steps:\n1. `actions/checkout`: This "Action" (a plugin) copies your code from GitHub onto the runner.\n2. `actions/setup-node`: This installs the specific version of Node.js you need.\n3. `run: npm ci`: This installs your project dependencies securely.' },
+          { type: 'callout', variant: 'tip', body: 'Use `actions/checkout@v4` instead of typing `git clone`. GitHub provides a vast marketplace of these pre-made actions to save you time.' },
+          { type: 'concept', body: 'Once you commit this file to your repo, go to the "Actions" tab on GitHub. You will see a yellow spinning circle — that\'s your pipeline running in the cloud!' },
+          { type: 'summary', points: ['The "on" block defines the trigger branch', 'The "uses" keyword pulls in pre-made community actions', 'The "run" keyword executes standard terminal commands', 'Check the "Actions" tab on GitHub to see live logs'] }
+        ]},
+        { id: 'l_cicd_stages', title: 'Build, Test, Deploy Stages', duration: '12 min', difficulty: 'Intermediate', content: [
+          { type: 'concept', body: 'In a professional pipeline, we don\'t just run everything in one big list. We separate concerns into multiple "Jobs" for better organization and speed.' },
+          { type: 'diagram', title: 'Multi-Job Workflow', content: '[ Job: Test ] ➔ [ Job: Build ] ➔ [ Job: Deploy ]\n\nIf Test fails, Build never starts.\nIf Build fails, Deploy never starts.' },
+          { type: 'concept', body: 'By default, GitHub Jobs run in **parallel** (at the same time). To make them run sequentially, we use the `needs` keyword. This tells Job B to wait for Job A to finish successfully.' },
+          { type: 'code', language: 'yaml', code: 'jobs:\n  test:\n    runs-on: ubuntu-latest\n    steps: [...] \n\n  build:\n    needs: test # Wait for tests to pass!\n    runs-on: ubuntu-latest\n    steps: [...]' },
+          { type: 'callout', variant: 'mistake', body: 'Forgetting `needs` is a common mistake. Without it, your "Deploy" job might start before your "Test" job finishes, potentially deploying broken code.' },
+          { type: 'concept', body: 'Separating jobs also allows for "Conditional Execution". For example: "Only run the Deploy job IF the branch is main".' },
+          { type: 'summary', points: ['Separate tasks into Jobs for better log organization', 'Use "needs" to create a sequence of stages', 'Jobs run on separate, clean runners by default', 'Conditionals (if:) can control when specific jobs run'] }
         ]}
       ]},
-      { id: 'sec3_cicd', title: 'CI/CD Tools ecosystem', lessons: [
-        { id: 'l_cicd4', title: 'Popular Tools: Actions, Jenkins, etc.', duration: '10 min', difficulty: 'Intermediate', content: [
-          { type: 'concept', body: 'There are many tools available to build CI/CD pipelines. They all generally execute scripts dynamically inside temporary virtual servers or containers.' },
-          { type: 'concept', body: 'GitHub Actions: Built directly into GitHub. Extremely popular for modern web development. Trigger workflows based on GitHub events (pull request, push, issue creation).' },
-          { type: 'concept', body: 'Jenkins: The legacy open-source heavyweight. Extremely customizable, huge plugin ecosystem, but requires you to manage your own server.' },
-          { type: 'concept', body: 'GitLab CI/CD: Highly integrated if you use GitLab. Known for its powerful configuration features.' },
-          { type: 'callout', variant: 'tip', body: 'If starting a fresh project on GitHub, GitHub Actions is the easiest and most powerful way to learn CI/CD.' },
-          { type: 'code', language: 'yaml', code: '# ─── Basic GitHub Actions Workflow (.github/workflows/main.yml) ───\nname: CI Pipeline\non: [push]\njobs:\n  build:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v3\n      - name: Run Tests\n        run: npm test' }
+      { id: 'sec3_cicd_sec', title: 'Professional Configuration & Security', lessons: [
+        { id: 'l_cicd_env', title: 'Environment Variables & Secrets', duration: '12 min', difficulty: 'Intermediate', content: [
+          { type: 'concept', body: 'Your code often needs sensitive data (API keys, Database passwords) to run. However, you must NEVER commit these directly into your code or your YAML files. If you do, anyone with access to your repo can steal them.' },
+          { type: 'diagram', title: 'The flow of a Secret', content: '1. You save a secret in GitHub Settings ➔ Secrets ➔ Actions\n2. GitHub encrypts it securely\n3. During a run, GitHub injects it into the Runner\n4. Your code reads it as an Environment Variable' },
+          { type: 'code', language: 'yaml', code: '# How to use a secret in a workflow\nsteps:\n  - name: Deploy to Vercel\n    env:\n      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}\n    run: vercel --token $VERCEL_TOKEN' },
+          { type: 'callout', variant: 'warning', body: 'Even if a secret is printed to the logs, GitHub Actions will try to mask it with `***`. But it\'s still best practice to never intentionally log sensitive data.' },
+          { type: 'concept', body: 'Secrets are "Write-Only" in GitHub. Once you save them, you can never see them again — you can only update or delete them. This protects you even if your GitHub account is semi-compromised.' },
+          { type: 'summary', points: ['Never commit sensitive data to Git', 'Use GitHub Secrets for API keys and passwords', 'Inject secrets using the ${{ secrets.NAME }} syntax', 'Secrets are masked in logs for added protection'] }
+        ]},
+        { id: 'l_cicd_security', title: 'CI/CD Security Best Practices', duration: '10 min', difficulty: 'Advanced', content: [
+          { type: 'concept', body: 'In a "Supply Chain Attack", hackers target your CI/CD pipeline to inject malicious code into your production app. Securing your pipeline is just as important as securing your app.' },
+          { type: 'summary', points: ['LEAST PRIVILEGE: Give your pipeline only the permissions it needs (e.g., if it only needs to read code, don\'t give it write access).', 'ACTION PINNING: Use exact version hashes (e.g., @a1b2c3d) instead of tags (@v4). Tags can be moved by hackers; hashes cannot.', 'BRANCH PROTECTION: Require status checks (your CI tests) to pass before code can be merged into main.'] },
+          { type: 'callout', variant: 'tip', body: 'Use tools like "Dependabot" or "Snyk" in your CI to automatically scan your dependencies for known vulnerabilities before you build your app.' },
+          { type: 'code', language: 'yaml', code: '# Example of pinning an action to a specific hash for max security\n- uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1' },
+          { type: 'concept', body: 'Always assume your runner could be compromised. Don\'t let one job access secrets meant for another job (use Environment Secrets in GitHub for this).' },
+          { type: 'summary', points: ['Pin actions to specific Git hashes', 'Enforce branch protection on your main branch', 'Scan for vulnerabilities during the CI phase', 'Limit the scope of secret access'] }
+        ]},
+        { id: 'l_cicd_debug', title: 'Debugging CI/CD Pipelines', duration: '12 min', difficulty: 'Intermediate', content: [
+          { type: 'concept', body: 'Pipelines fail. It\'s part of the process. Debugging a pipeline is different from debugging locally because you can\'t easily "touch" the remote server.' },
+          { type: 'diagram', title: 'The Debugging Workflow', content: 'Step 1: Check GitHub Actions logs (look for the Red X)\nStep 2: Read the error message at the bottom of the log\nStep 3: Try to reproduce the error LOCALLY\nStep 4: Use "Debug Logging" (set ACTIONS_STEP_DEBUG to true)' },
+          { type: 'callout', variant: 'tip', body: 'Pro Tip: Use the "action-tmate" action to pause your pipeline and get an SSH terminal into the GitHub Runner. You can then poke around the file system to see exactly why it\'s failing!' },
+          { type: 'code', language: 'bash', code: '# If it works locally but fails in CI, it\'s usually:\n1. Missing Environment Variable\n2. Different Node/OS version\n3. Cache corruption (try clearing it)\n4. Network restrictions' },
+          { type: 'concept', body: 'Always check if you forgot to include a file in `.gitignore` that your app needs, or if your local dev environment has a database that the CI server doesn\'t have access to.' },
+          { type: 'summary', points: ['Read the logs carefully from bottom to top', 'Match your local environment to the CI environment', 'Use SSH debugging actions for complex issues', 'Enable debug logging for more verbose output'] }
+        ]}
+      ]},
+      { id: 'sec4_cicd_adv', title: 'Advanced Scenarios & Optimization', lessons: [
+        { id: 'l_cicd_docker', title: 'CI/CD with Docker', duration: '15 min', difficulty: 'Advanced', content: [
+          { type: 'concept', body: 'Docker and CI/CD are a match made in heaven. Instead of deploying raw code, your CI pipeline builds a "Docker Image" which contains the OS, the runtime, and your app all in one package.' },
+          { type: 'diagram', title: 'The Docker CI Flow', content: '1. CI builds image: "docker build -t myapp:latest ."\n2. CI tests the image: "docker run myapp npm test"\n3. CI pushes to Registry: "docker push myuser/myapp:v1.0"\n4. Production pulls image: "docker pull myuser/myapp:v1.0"' },
+          { type: 'code', language: 'yaml', code: '# GitHub Action to build and push to Docker Hub\n- name: Build and Push\n  uses: docker/build-push-action@v5\n  with:\n    push: true\n    tags: user/app:latest' },
+          { type: 'callout', variant: 'note', body: 'This eliminates "It works on my machine" entirely. If the Docker container works in CI, it WILL work in Production because they are the exact same files and OS.' },
+          { type: 'summary', points: ['Use Docker to package your entire runtime environment', 'Push images to a Registry (Docker Hub, AWS ECR)', 'Production servers pull and run standardized containers', 'Guarantees environment parity between Dev and Prod'] }
+        ]},
+        { id: 'l_cicd_realworld', title: 'Real-world CI/CD Example', duration: '15 min', difficulty: 'Advanced', content: [
+          { type: 'concept', body: 'What does a professional "Enterprise" pipeline look like? It often involves multiple environments, security gates, and automated notifications.' },
+          { type: 'diagram', title: 'An Enterprise Pipeline', content: 'DEV PUSH ➔ LINT ➔ TEST ➔ BUILD ➔\n  DEPLOY TO STAGING ➔ E2E TESTS ➔\n    MANUAL SIGN-OFF ➔ DEPLOY TO PROD ➔\n      SLACK NOTIFICATION 🔔' },
+          { type: 'concept', body: 'In the real world, you might use "Deployment Strategies" like Blue/Green (running two identical versions and swapping traffic) or Canary (deploying to 5% of users first to check for errors).' },
+          { type: 'callout', variant: 'tip', body: 'Real-world pipelines also handle "Rollbacks". If the new version crashes, the pipeline should be able to automatically revert to the previous working version in seconds.' },
+          { type: 'summary', points: ['Multi-environment flows (Dev ➔ Staging ➔ Prod)', 'Advanced deployment patterns (Canary, Blue/Green)', 'Automated rollback mechanisms for stability', 'Integration with communication tools like Slack/Discord'] }
+        ]},
+        { id: 'l_cicd_optimize', title: 'Best Practices & Optimization', duration: '12 min', difficulty: 'Advanced', content: [
+          { type: 'concept', body: 'If your pipeline takes 30 minutes to run, developers will hate it. A fast pipeline (under 5 minutes) is essential for high productivity.' },
+          { type: 'summary', points: ['CACHING: Store your node_modules between runs so you don\'t have to re-download them every time.', 'PARALLELISM: Run your Unit tests and Linting at the same time on different runners.', 'MATRIX BUILDS: Run your tests on Node 18, 20, and 22 simultaneously.'] },
+          { type: 'code', language: 'yaml', code: '# Example of caching node_modules in GitHub Actions\n- name: Cache dependencies\n  uses: actions/cache@v4\n  with:\n    path: ~/.npm\n    key: ${{ runner.os }}-node-${{ hashFiles(\'**/package-lock.json\') }}' },
+          { type: 'callout', variant: 'tip', body: 'A well-optimized pipeline uses "Partial Builds" — only rebuilding the parts of the app that actually changed.' },
+          { type: 'summary', points: ['Shave minutes off your build with effective caching', 'Use Matrix strategies to test multiple versions at once', 'Keep your pipeline "Lean" — only run what is necessary', 'A fast feedback loop is the heart of DevOps'] }
         ]}
       ]}
+    ]
+  },
+  docker: {
+    id: 'docker', title: 'Docker & Containers', description: 'Build, ship, and run anywhere', icon: '🐳',
+    badges: [
+      { label: 'Docker', variant: 'beginner' },
+      { label: 'Containers', variant: 'intermediate' },
+      { label: 'Environments', variant: 'intermediate' }
+    ],
+    sections: [
+      { id: 'sec1_docker', title: 'Introduction to Containers', lessons: [
+        { id: 'l_docker1', title: 'What are Containers?', duration: '8 min', difficulty: 'Beginner', content: [
+          { type: 'concept', body: 'A container is a standard unit of software that packages up code and all its dependencies so the application runs quickly and reliably from one computing environment to another.' },
+          { type: 'analogy', body: 'Think of shipping containers. Before they existed, merchants had to manually load sacks of rice, barrels of oil, and boxes of clothing into the hold of a ship. If they didn\'t fit perfectly, it was chaos. The shipping container standardized everything — as long as it\'s in the box, it fits on any ship, any crane, and any truck globally. Software containers do the exact same thing for your code.' },
+          { type: 'concept', body: 'Containers provide **Process Isolation**. This means your "App A" can run in its own little box, completely unaware that "App B" is running on the same computer. They don\'t conflict, and they don\'t share internal files.' },
+          { type: 'diagram', title: 'Container Isolation', content: '┌─────────────────────────────────────────────────────┐\n│               Operating System (Host)               │\n│  ┌──────────┐      ┌──────────┐      ┌──────────┐  │\n│  │ Container│      │ Container│      │ Container│  │\n│  │ (App A)  │      │ (App B)  │      │ (App C)  │  │\n│  └──────────┘      └──────────┘      └──────────┘  │\n└─────────────────────────────────────────────────────┘' },
+          { type: 'callout', variant: 'tip', body: 'Docker is the engine that manages these boxes. It allows you to build, run, and share containers easily without worrying about the underlying hardware.' },
+          { type: 'summary', points: ['Containers package code + dependencies into a single unit', 'They provide isolation using OS-level virtualization', 'Solves the "it works on my machine" problem', 'Highly portable — run exactly the same everywhere'] }
+        ]},
+        { id: 'l_docker2', title: 'Docker vs Virtual Machines', duration: '10 min', difficulty: 'Beginner', content: [
+          { type: 'concept', body: 'Beginners often confuse Containers with Virtual Machines (VMs). While they both provide isolation, they do it at completely different levels.' },
+          { type: 'concept', body: 'A Virtual Machine (VM) includes the application, the necessary binaries and libraries, and an **entire Guest Operating System**. This makes them heavy (gigabytes) and slow to start (minutes).' },
+          { type: 'concept', body: 'A Docker Container includes only the application and its dependencies. It **shares the kernel** of the host operating system with other containers. This makes them extremely lightweight (megabytes) and fast to start (milliseconds).' },
+          { type: 'diagram', title: 'VM vs Container Architecture', content: 'VIRTUAL MACHINE:                  DOCKER CONTAINER:\n[ APP 1 ] [ APP 2 ]              [ APP 1 ] [ APP 2 ]\n[ LIBS  ] [ LIBS  ]              [ LIBS  ] [ LIBS  ]\n[ GUEST OS ] [ GUEST OS ]        [   DOCKER ENGINE  ]\n[   HYPERVISOR    ]              [   HOST OS KERNEL  ]\n[     HARDWARE    ]              [     HARDWARE      ]' },
+          { type: 'callout', variant: 'note', body: 'Because containers share the host kernel, they use significantly fewer resources. You can run hundreds of containers on a server that might only support three or four VMs.' },
+          { type: 'summary', points: ['VMs virtualize hardware; Containers virtualize the OS', 'VMs have full Guest OS; Containers share the host kernel', 'Containers are much smaller and faster than VMs', 'Choose VMs for total isolation; Containers for high-speed delivery'] }
+        ]}
+      ]},
+      { id: 'sec2_docker', title: 'Building with Docker', lessons: [
+        { id: 'l_docker3', title: 'Why Docker is Used & Use Cases', duration: '8 min', difficulty: 'Beginner', content: [
+          { type: 'concept', body: 'Why did Docker become the industry standard almost overnight? Because it solves the biggest pain points in the software development lifecycle.' },
+          { type: 'summary', points: ['ENVIRONMENT PARITY: No more "it worked on my machine but failed in production." The container you test is the exact container you deploy.', 'ISOLATION: Run Node.js 14 and Node.js 20 on the same machine without them ever seeing each other.', 'MICROSERVICES: Docker is the foundation of microservices architecture where apps are broken into tiny, independent pieces.'] },
+          { type: 'concept', body: 'Real-world example: A fintech company needs to run a legacy Java 8 app next to a modern Python 3.12 app. Without Docker, this would be a nightmare of conflicting environment variables and Java versions. With Docker, each app lives in its own isolated container.' },
+          { type: 'callout', variant: 'tip', body: 'Onboarding is a breeze with Docker. Instead of new developers spending three days installing databases and languages, they just run "docker compose up" and have the full environment in five minutes.' },
+          { type: 'summary', points: ['Standardizes the environment across teams', 'Makes microservices manageable', 'Speeds up developer onboarding', 'Integrates perfectly with CI/CD for automated testing'] }
+        ]},
+        { id: 'l_docker4', title: 'Basic Docker Commands & Dockerfile', duration: '15 min', difficulty: 'Intermediate', content: [
+          { type: 'concept', body: 'To use Docker, you need to understand two key things: **Images** and **Containers**. An Image is a read-only blueprint (the recipe). A Container is a running instance of that image (the cake).' },
+          { type: 'concept', body: 'You define an image using a **Dockerfile** — a simple text file with instructions on how to build your environment.' },
+          { type: 'code', language: 'dockerfile', code: '# ─── Example Dockerfile for Node.js ───\nFROM node:20-alpine          # Base image\nWORKDIR /app                 # Working directory\nCOPY package*.json ./        # Copy dependencies\nRUN npm install              # Install dependencies\nCOPY . .                     # Copy app source code\nEXPOSE 3000                  # Open port 3000\nCMD ["node", "app.js"]       # Command to run the app' },
+          { type: 'code', language: 'bash', code: '# ─── Essential CLI Commands ───\n\n# Build an image from a Dockerfile\ndocker build -t my-app:v1 .\n\n# Run a container from an image\n# -d: detached (background), -p: port mapping (host:container)\ndocker run -d -p 8080:3000 --name my-running-app my-app:v1\n\n# List running containers\ndocker ps\n\n# List all images\ndocker images\n\n# Stop a container\ndocker stop my-running-app' },
+          { type: 'callout', variant: 'tip', body: 'The port mapping flag `-p 8080:3000` is vital. It tells Docker: "When I visit localhost:8080 on my computer, send that traffic to port 3000 inside the container."' },
+          { type: 'summary', points: ['An Image is a blueprint; a Container is a running instance', 'Dockerfile contains the instructions to build an image', 'Use "docker build" to create images', 'Use "docker run" to start containers from images'] }
+        ]}
+      ]},
+      { id: 'sec3_docker', title: 'Docker in DevOps', lessons: [
+        { id: 'l_docker5', title: 'How Docker fits into CI/CD', duration: '10 min', difficulty: 'Intermediate', content: [
+          { type: 'concept', body: 'In modern CI/CD, Docker is the ultimate delivery vehicle. Instead of moving raw code, we move standardized images. This ensures the exact same bits tested in CI are the ones running in Production.' },
+          { type: 'diagram', title: 'Docker Build-Push-Pull Workflow', content: '1. DEV: Pushes code to GitHub\n2. CI: Runs "docker build" and "docker test"\n3. REGISTRY: CI pushes image to Docker Hub or AWS ECR\n4. PROD: Server runs "docker pull" and restarts the container' },
+          { type: 'concept', body: 'This "Immutable Infrastructure" means we never fix things on the server. If there\'s a bug, we fix the code, build a new image, and replace the old container. This makes deployments predictable and rollback-friendly.' },
+          { type: 'callout', variant: 'note', body: 'Because the Docker image is self-contained, the production server doesn\'t even need Node.js or Python installed — it only needs Docker.' },
+          { type: 'summary', points: ['Images are pushed to a Registry (like Docker Hub) for storage', 'CI/CD pipelines automate the building and pushing of images', 'Production servers pull the latest image and run it as a container', 'Guarantees 100% environment parity between testing and live'] }
+        ]}
+      ]}
+    ]
+  },
+  kubernetes: {
+    id: 'kubernetes', title: 'Kubernetes', description: 'Orchestrate containers at scale', icon: '☸️',
+    badges: [
+      { label: 'K8s', variant: 'intermediate' },
+      { label: 'Orchestration', variant: 'intermediate' },
+      { label: 'Scaling', variant: 'advanced' }
+    ],
+    sections: [
+      {
+        id: 'sec1_k8s', title: 'Kubernetes Foundations', lessons: [
+          {
+            id: 'l_k8s_intro', title: 'Introduction to Kubernetes', duration: '10 min', difficulty: 'Intermediate', content: [
+              { type: 'concept', body: 'Kubernetes (K8s) is an open-source system for automating deployment, scaling, and management of containerized applications. It was originally designed by Google and is now maintained by the Cloud Native Computing Foundation (CNCF).' },
+              { type: 'analogy', body: 'If Docker is the "Shipping Container", then Kubernetes is the "Giant Container Port". A port needs cranes, trucks, schedules, and systems to manage thousands of containers arriving and leaving. Kubernetes is the brain that manages all those containers, making sure they land in the right spot, get electricity, and are replaced if they break.' },
+              { type: 'diagram', title: 'From Individual Containers to Orchestration', content: 'SINGLE DOCKER HOST: [ App A ] [ App B ]  ➔ Manual control\n\nKUBERNETES CLUSTER:\n[ Master Plane ] ➔ Controls scheduling\n  └── [ Node 1 ] [ Node 2 ] [ Node 3 ]\n      └── [ Pods ] [ Pods ] [ Pods ] ➔ Automated scaling' },
+              { type: 'callout', variant: 'note', body: 'The name Kubernetes comes from Greek, meaning "helmsman" or "pilot". The "K8s" abbreviation refers to the 8 letters between the "K" and the "s".' },
+              { type: 'summary', points: ['K8s is the brain that manages hundreds/thousands of containers', 'Handles self-healing (restarts failed containers)', 'Provides service discovery and load balancing', 'Open-source and used by virtually every tech giant'] }
+            ]
+          },
+          {
+            id: 'l_k8s_why', title: 'Why Kubernetes is Needed', duration: '8 min', difficulty: 'Intermediate', content: [
+              { type: 'concept', body: 'In the early days of microservices, we could manage 5 or 10 Docker containers manually. But what happens when you have 500? Or when a server goes down at 3 AM? Manual management becomes impossible.' },
+              { type: 'summary', points: ['HIGH AVAILABILITY: K8s ensures your app stays up even if physical servers fail.', 'SCALABILITY: If traffic spikes, K8s automatically spins up more instances of your app.', 'ZERO DOWNTIME: Update your app while it\'s running — K8s rolls out the new version one container at a time.'] },
+              { type: 'callout', variant: 'tip', body: 'Without Kubernetes, if a container crashes, it stays crashed. With Kubernetes, it notices the crash and automatically restarts a new one within seconds.' },
+              { type: 'diagram', title: 'The Self-Healing Lifecycle', content: '1. App crashes ➔ 2. K8s checks "Desired State" ➔ 3. K8s sees 0 running (wants 3) ➔ 4. K8s starts a fresh container immediately ➔ 5. Service restored! ✅' },
+              { type: 'open_question', question: 'Based on what you\'ve learned, why is "Self-Healing" such a game-changer for DevOps teams who previously had to fix server crashes manually at 3 AM?', placeholder: 'Describe the impact on team morale and system reliability...' }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'sec2_k8s', title: 'Kubernetes Architecture', lessons: [
+          {
+            id: 'l_k8s_arch', title: 'Kubernetes Architecture Basics', duration: '12 min', difficulty: 'Intermediate', content: [
+              { type: 'concept', body: 'A Kubernetes cluster consists of two types of resources: The **Control Plane** (the brain) and **Nodes** (the workers).' },
+              { type: 'diagram', title: 'The Cluster Brain & Body', content: 'CONTROL PLANE (Master):\n- API Server (Gateway)\n- etcd (Database of cluster state)\n- Scheduler (Decides where pods work)\n- Controller Manager (Maintains desired state)\n\nWORKER NODES:\n- Kubelet (Agent running on node)\n- Kube Proxy (Networking)\n- Container Runtime (e.g., Docker or containerd)' },
+              { type: 'callout', variant: 'note', body: 'The etcd database is the single source of truth. If it dies, the cluster loses its memory. That\'s why it\'s always backed up and run in high-availability mode.' },
+              { type: 'summary', points: ['Control Plane manages the cluster state', 'Worker Nodes run the actual application containers', 'Kubelet is the "manager" on each node that talks to the brain', 'Communication happens via the API Server'] }
+            ]
+          },
+          {
+            id: 'l_k8s_pods', title: 'Core Objects: Pods', duration: '8 min', difficulty: 'Intermediate', content: [
+              { type: 'concept', body: 'A Pod is the smallest deployable unit in Kubernetes. It is a wrapper around one or more containers. You never run a container directly in K8s — you run a Pod.' },
+              { type: 'analogy', body: 'Think of a Pod as a "Pea Pod". The peas inside are the containers. Usually, there\'s only one pea (container) in a pod, but sometimes you have a "Sidecar" container (like a helper logger) in the same pod.' },
+              { type: 'code', language: 'yaml', code: '# ─── A Simple Pod Definition ───\napiVersion: v1\nkind: Pod\nmetadata:\n  name: my-webapp\nspec:\n  containers:\n  - name: frontend\n    image: nginx:latest' },
+              { type: 'callout', variant: 'tip', body: 'Containers in the same pod share the same network IP and storage volumes. They can talk to each other using "localhost".' },
+              { type: 'summary', points: ['Pod = Wrapper for one or more containers', 'Smallest unit K8s can manage', 'Pods are ephemeral (they die and get replaced)', 'Usually 1 container per pod, plus optional helpers'] }
+            ]
+          },
+          {
+            id: 'l_k8s_svc', title: 'Core Objects: Services', duration: '10 min', difficulty: 'Intermediate', content: [
+              { type: 'concept', body: 'Because Pods are "ephemeral" (they get deleted and re-created with new IP addresses), you can\'t rely on a Pod\'s IP. A **Service** provides a stable, permanent IP address and DNS name for a group of Pods.' },
+              { type: 'diagram', title: 'Service Load Balancing', content: '[ User ] ➔ [ Service: Stable IP ]\n             │\n             ├──➔ [ Pod A: 10.0.1.5 ]\n             └──➔ [ Pod B: 10.0.1.9 ]\n             (Service routes traffic to healthy pods only)' },
+              { type: 'summary', points: ['ClusterIP: Internal-only access (default)', 'NodePort: Opens a port on every node for external access', 'LoadBalancer: Automatically creates a cloud load balancer (AWS/GCP/Azure)', 'Services provide name resolution (e.g., "db-service" talks to your database)'] }
+            ]
+          },
+          {
+            id: 'l_k8s_deploy', title: 'Core Objects: Deployments', duration: '12 min', difficulty: 'Intermediate', content: [
+              { type: 'concept', body: 'A Deployment is a high-level object that manages Pods. You tell the Deployment: "I want 3 copies of this app running," and it makes it happen. If a Pod vanishes, the Deployment replaces it.' },
+              { type: 'code', language: 'yaml', code: '# ─── A Deployment with 3 Replicas ───\napiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: web-deploy\nspec:\n  replicas: 3\n  selector:\n    matchLabels:\n      app: web\n  template:\n    metadata:\n      labels:\n        app: web\n    spec:\n      containers:\n      - name: nginx\n        image: nginx:1.21' },
+              { type: 'callout', variant: 'note', body: 'Deployments handle "Rolling Updates". When you change the version, it starts a new pod before killing an old one, ensuring zero downtime for your users.' },
+              { type: 'summary', points: ['Manages desired state (e.g., "Run 5 pods")', 'Handles automated Rollouts and Rollbacks', 'The most common way to deploy apps in Kubernetes', 'Built on top of "ReplicaSets"'] }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'sec3_k8s', title: 'Kubernetes in Action', lessons: [
+          {
+            id: 'l_k8s_kubectl', title: 'kubectl Basics', duration: '15 min', difficulty: 'Intermediate', content: [
+              { type: 'concept', body: '`kubectl` is the command-line interface for communicating with your Kubernetes cluster. It converts your commands into API calls that the Master Node understands.' },
+              { type: 'code', language: 'bash', code: '# ─── Essential Commands ───\n\n# See what\'s running\nkubectl get pods\nkubectl get services\nkubectl get nodes\n\n# Detail view of an object\nkubectl describe pod my-pod-name\n\n# Create/Update from a file (Most common!)\nkubectl apply -f deployment.yaml\n\n# View logs\nkubectl logs my-pod-name\n\n# Execute a command inside a pod\nkubectl exec -it my-pod-name -- /bin/bash' },
+              { type: 'callout', variant: 'tip', body: 'Pro tip: Use `alias k=kubectl` to save time typing. Most Kubernetes engineers do this within their first week!' },
+              { type: 'summary', points: ['apply -f: The universal command for deploying anything', 'get: Used to sanity-check the cluster state', 'describe: The first step when something is broken', 'logs: Vital for seeing app errors'] }
+            ]
+          },
+          {
+            id: 'l_k8s_scaling', title: 'Scaling and Load Balancing', duration: '10 min', difficulty: 'Advanced', content: [
+              { type: 'concept', body: 'Scaling in Kubernetes can be **Manual** (cmd line) or **Automatic** (Horizontal Pod Autoscaler). K8s can monitor CPU/Memory and add pods if the load gets too high.' },
+              { type: 'code', language: 'bash', code: '# Manual scaling to 10 replicas\nkubectl scale deployment my-web --replicas=10' },
+              { type: 'concept', body: 'The Horizontal Pod Autoscaler (HPA) works like a thermostat. You set a target (e.g., 50% CPU), and K8s adds or removes pods to stay at that level.' },
+              { type: 'summary', points: ['Scaling is nearly instant (seconds)', 'HPA automates scaling based on traffic/load', 'Cluster Autoscaler can even add new physical servers if needed', 'No more manual server provisioning during sales events'] }
+            ]
+          },
+          {
+            id: 'l_k8s_vs_docker', title: 'Kubernetes vs Docker', duration: '8 min', difficulty: 'Intermediate', content: [
+              { type: 'concept', body: 'It\'s not "Docker vs Kubernetes". It\'s usually "Docker **and** Kubernetes". Docker packages the application. Kubernetes runs it across a cluster of servers.' },
+              { type: 'diagram', title: 'Working Together', content: '1. Build Image (Docker)\n   │\n2. Push to Registry (Docker Hub)\n   │\n3. Write Deployment (Kubernetes YAML)\n   │\n4. Orchestrate (Kubernetes Cluster)' },
+              { type: 'summary', points: ['Docker = The Container Maker', 'Kubernetes = The Container Manager', 'You use Docker on your laptop, K8s in the Production Data Center', 'They are complementary tools, not competitors'] }
+            ]
+          },
+          {
+            id: 'l_k8s_realworld', title: 'Real-world Use Cases', duration: '10 min', difficulty: 'Advanced', content: [
+              { type: 'concept', body: 'How do the world\'s largest apps use K8s? Examples include Pokémon GO (scaled to 50x its expected traffic on launch day), Spotify (thousands of microservices), and Airbnb.' },
+              { type: 'summary', points: ['HYBRID CLOUD: Run some apps on AWS and others on your own servers — K8s makes them look the same.', 'MICROSERVICES: Managing 200 tiny apps without K8s would require a massive army of humans.', 'BATCH PROCESSING: K8s can spin up thousands of pods to calculate data, then delete them all to save money.'] },
+              { type: 'callout', variant: 'tip', body: 'Managing K8s is hard. That\'s why most companies use "Managed Kubernetes" like Amazon EKS, Google GKE, or Azure AKS where the cloud provider manages the master nodes for you.' }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  monitoring: {
+    id: 'monitoring', title: 'Monitoring & Observability', description: 'Prometheus, Grafana, and alerting', icon: '📊',
+    badges: [
+      { label: 'Prometheus', variant: 'intermediate' },
+      { label: 'Grafana', variant: 'intermediate' },
+      { label: 'Observability', variant: 'advanced' }
+    ],
+    sections: [
+      {
+        id: 'sec1_mon', title: 'Monitoring Foundations', lessons: [
+          {
+            id: 'l_mon_intro', title: 'Introduction to Monitoring', duration: '8 min', difficulty: 'Beginner', content: [
+              { type: 'concept', body: 'Monitoring is the process of collecting, analyzing, and using information to track the health and performance of your applications and infrastructure. Observability is a higher level: it means you can understand the *internal* state of your system just by looking at the *external* data it produces.' },
+              { type: 'analogy', body: 'Monitoring is like the dashboard in your car. It tells you your speed, how much fuel you have, and if the engine is overheating. Observability is like having a black box flight recorder that can tell you *why* the engine overheated by analyzing thousands of sensor data points.' },
+              { type: 'summary', points: ['Monitoring answers: "Is the system healthy?"', 'Observability answers: "Why is it behaving this way?"', 'Telemetry = Logs, Metrics, and Traces', 'Crucial for maintaining High Availability'] },
+              { type: 'open_question', question: 'Think of an app you use daily (like Spotify or Instagram). If it starts running slowly, what is one metric you would check first to see if it\'s "healthy"?', placeholder: 'e.g., CPU usage, network latency, database errors...' }
+            ]
+          },
+          {
+            id: 'l_mon_metrics_logs', title: 'Logs vs Metrics', duration: '10 min', difficulty: 'Beginner', content: [
+              { type: 'concept', body: 'Logs and Metrics are the two most common types of telemetry. They serve different purposes and choosing the right one saves storage and time.' },
+              { type: 'diagram', title: 'Telemetry Comparison', content: 'METRICS (Numbers): \n- Temp: 98.6°F, CPU: 45%\n- Fast, cheap to store, great for alerting.\n\nLOGS (Text): \n- "User Jane logged in at 10:00 AM"\n- Heavy, expensive, great for debugging specific events.' },
+              { type: 'callout', variant: 'tip', body: 'If you want to know "How many people are on my site right now?", use a Metric. If you want to know "Why did this specific user fail to check out?", use a Log.' },
+              { type: 'summary', points: ['Metrics are numeric measurements over time', 'Logs are detailed records of discrete events', 'Use metrics for dashboards/alerts', 'Use logs for deep-dive troubleshooting'] }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'sec2_mon', title: 'Prometheus & Grafana', lessons: [
+          {
+            id: 'l_mon_prom_arch', title: 'Prometheus Basics', duration: '12 min', difficulty: 'Intermediate', content: [
+              { type: 'concept', body: 'Prometheus is the de-facto standard for monitoring cloud-native apps. Unlike most systems that "Push" data to a server, Prometheus "Pulls" (scrapes) metrics from your applications.' },
+              { type: 'diagram', title: 'Prometheus Architecture', content: '[ Your App ] ➔ exposes /metrics endpoint\n       ↑\n[ Prometheus ] ➔ Scrapes /metrics every 15s\n       ↓\n[ TSDB ] ➔ Stores data as Time Series' },
+              { type: 'callout', variant: 'note', body: 'To let Prometheus see your app, you use an "Exporter" or a client library that opens a simple web page (usually at /metrics) showing plain text numbers.' },
+              { type: 'summary', points: ['Prometheus uses a "Pull" model for reliability', 'Stores data in a Time Series Database (TSDB)', 'Highly compatible with Kubernetes', 'Can handle millions of data points'] }
+            ]
+          },
+          {
+            id: 'l_mon_prom_metrics', title: 'Prometheus Metrics Types', duration: '10 min', difficulty: 'Intermediate', content: [
+              { type: 'concept', body: 'Prometheus understands four main types of metrics. Using the right type ensures your math and graphs are correct.' },
+              { type: 'summary', points: ['COUNTER: A value that only goes UP (e.g., total requests). Never goes down unless the app restarts.', 'GAUGE: A value that can go up and down (e.g., current memory usage, temperature).', 'HISTOGRAM: Samples observations (like request duration) and counts them in buckets.', 'SUMMARY: Similar to histogram but calculates quantiles (like 95th percentile) app-side.'] },
+              { type: 'callout', variant: 'tip', body: 'Use a Counter for "Total Sales" and a Gauge for "Current Active Users".' }
+            ]
+          },
+          {
+            id: 'l_mon_promql', title: 'PromQL Basics', duration: '15 min', difficulty: 'Intermediate', content: [
+              { type: 'concept', body: 'PromQL (Prometheus Query Language) is how you ask questions about your data. It is powerful and designed specifically for time-series math.' },
+              { type: 'code', language: 'promql', code: '# Get total requests per second over the last 5 minutes\nrate(http_requests_total[5m])\n\n# Get memory usage higher than 1GB\nnode_memory_usage_bytes > 1073741824\n\n# Calculate error rate percentage\nsum(rate(http_requests_total{status="500"}[5m])) \n/ \nsum(rate(http_requests_total[5m])) * 100' },
+              { type: 'summary', points: ['PromQL works on labels (e.g., {env="prod"})', 'rate() and irate() are the most common functions', 'Used for both Dashboards and Alerts'] }
+            ]
+          },
+          {
+            id: 'l_mon_grafana', title: 'Grafana Dashboards', duration: '10 min', difficulty: 'Intermediate', content: [
+              { type: 'concept', body: 'While Prometheus stores the data, Grafana visualizes it. It is the "beautiful face" of your monitoring system.' },
+              { type: 'analogy', body: 'If Prometheus is the "Database", Grafana is the "Front-end". It connects to Prometheus (as a data source) and turns numbers into beautiful charts, gauges, and world maps.' },
+              { type: 'callout', variant: 'tip', body: 'Most teams use Grafana to create "NOC Dashboards" — big screens in the office that show the literal heart rate of the entire company\'s infrastructure.' },
+              { type: 'summary', points: ['Grafana is tool-agnostic (works with Prometheus, SQL, etc.)', 'Supports variables to switch between "Dev" and "Prod" views', 'Essential for cross-team visibility'] }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'sec3_mon', title: 'Alerting & Operations', lessons: [
+          {
+            id: 'l_mon_alerting', title: 'Alerting System', duration: '10 min', difficulty: 'Advanced', content: [
+              { type: 'concept', body: 'Monitoring is useless if no one looks at it. Alerting ensures that when a metric crosses a critical threshold, the right people are notified.' },
+              { type: 'diagram', title: 'Alerting Pipeline', content: '[ Prometheus ] ➔ Detects Error ➔ [ Alertmanager ] ➔ [ Slack/PagerDuty ]\n(Checks rules every minute)' },
+              { type: 'callout', variant: 'warning', body: 'Beware of "Alert Fatigue". If your system sends 100 emails a day, humans will start ignoring them. Only alert on things that are "Actionable" and "Urgent".' },
+              { type: 'summary', points: ['Define thresholds using PromQL', 'Use Alertmanager to group and route alerts', 'Integrate with Slack, Discord, or Email', 'Critical for 24/7 reliability'] }
+            ]
+          },
+          {
+            id: 'l_mon_setup', title: 'Real-world Monitoring Setup', duration: '12 min', difficulty: 'Advanced', content: [
+              { type: 'concept', body: 'A professional setup often uses the "Golden Signals" of monitoring: Latency, Traffic, Errors, and Saturation.' },
+              { type: 'summary', points: ['LATENCY: The time it takes to service a request.', 'TRAFFIC: A measure of how much demand is being placed on your system.', 'ERRORS: The rate of requests that fail.', 'SATURATION: How "full" your service is (e.g., CPU/Disk limits).'] },
+              { type: 'callout', variant: 'tip', body: 'The "Four Golden Signals" were developed by Google\'s SRE team. If you monitor these four, you can catch almost any structural failure in your app.' }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  devsecops: {
+    id: 'devsecops', title: 'DevSecOps', description: 'Security in every pipeline', icon: '🔐',
+    badges: [
+      { label: 'Security', variant: 'beginner' },
+      { label: 'Automation', variant: 'intermediate' },
+      { label: 'Compliance', variant: 'advanced' }
+    ],
+    sections: [
+      {
+        id: 'sec1_sec', title: 'The Shift Left Movement', lessons: [
+          {
+            id: 'l_sec_intro', title: 'Introduction to DevSecOps', duration: '8 min', difficulty: 'Beginner', content: [
+              { type: 'concept', body: 'DevSecOps is the practice of integrating security into every single part of the DevOps lifecycle. Instead of a security check happening at the very end, we "Shift Left" and check for security vulnerabilities from the very first line of code.' },
+              { type: 'analogy', body: 'Think of building a car. Traditional security is a "Safety Inspector" standing at the end of the factory line checking the brakes. DevSecOps is having safety sensors and checklists at every station — from the engine assembly to the paint shop.' },
+              { type: 'summary', points: ['Security is a shared responsibility, not just one team\'s job', '"Shift Left" = Find bugs early when they are cheap to fix', 'Continuous Security, not just once a year audits'] },
+              { type: 'open_question', question: 'Why is it much cheaper to fix a security flaw during the "Shift Left" (coding) phase than it is to fix it once the application is already live?', placeholder: 'Consider the cost of data breaches, downtime, and developer hours...' }
+            ]
+          },
+          {
+            id: 'l_sec_why', title: 'Why Security in DevOps?', duration: '10 min', difficulty: 'Beginner', content: [
+              { type: 'concept', body: 'In the fast-paced world of DevOps, manual security can\'t keep up. If you deploy 10 times a day but your security team takes 2 weeks to audit a release, security becomes a bottleneck.' },
+              { type: 'summary', points: ['Automated security keeps up with automated deployments', 'Prevents data breaches and costly outages', 'Reduces legal and compliance risks'] },
+              { type: 'callout', variant: 'warning', body: 'The average cost of a data breach is over $4 million. Investing in automated security early is significantly cheaper than fixing a headline-grabbing hack later.' }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'sec2_sec', title: 'Secure Pipelines', lessons: [
+          {
+            id: 'l_sec_pipeline', title: 'Secure CI/CD Pipeline', duration: '12 min', difficulty: 'Intermediate', content: [
+              { type: 'concept', body: 'A Secure Pipeline adds "Security Gates" to your automated workflow. If a piece of code is insecure, the pipeline fails and it is never allowed to reach Production.' },
+              { type: 'diagram', title: 'The Security Gates', content: 'Code ➔ [ Lint ] ➔ [ SAST ] ➔ [ SCA ] ➔ [ Container Scan ] ➔ Deploy\n(Each bracket is a security check)' },
+              { type: 'summary', points: ['SAST: Static Analysis (scanning your source code)', 'SCA: Software Composition Analysis (scanning your dependencies)', 'Container Scanning: Looking for vulnerabilities in your Docker images'] }
+            ]
+          },
+          {
+            id: 'l_sec_secrets', title: 'Secrets Management', duration: '10 min', difficulty: 'Intermediate', content: [
+              { type: 'concept', body: 'Secrets are things like API keys, database passwords, and SSH keys. You must NEVER store these in your source code. If you do, a single "git push" could expose your entire company to the world.' },
+              { type: 'callout', variant: 'mistake', body: 'Hardcoding secrets in code is the #1 cause of major cloud hacks. Even if a repo is private, it\'s still a huge risk.' },
+              { type: 'summary', points: ['Use Environment Variables for secrets', 'Use Secret Vaults (HashiCorp Vault, AWS Secrets Manager)', 'Use "git-secrets" to prevent accidental pushes of keys', 'Rotate secrets regularly'] }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'sec3_sec', title: 'Tools of the Trade', lessons: [
+          {
+            id: 'l_sec_trivy', title: 'Vulnerability Scanning (Trivy)', duration: '12 min', difficulty: 'Intermediate', content: [
+              { type: 'concept', body: 'Trivy is a popular, open-source tool for scanning container images. It looks for outdated libraries or known vulnerabilities (CVEs) inside your Docker images.' },
+              { type: 'code', language: 'bash', code: '# ─── Scanning a local image ───\ntrivy image my-app:latest\n\n# ─── High-severity only ───\ntrivy image --severity HIGH,CRITICAL my-app:latest' },
+              { type: 'callout', variant: 'tip', body: 'Add Trivy to your CI pipeline. If it finds a "CRITICAL" vulnerability, stop the build immediately.' }
+            ]
+          },
+          {
+            id: 'l_sec_snyk', title: 'Vulnerability Scanning (Snyk)', duration: '12 min', difficulty: 'Intermediate', content: [
+              { type: 'concept', body: 'Snyk is a powerful platform that scans your application code (`package.json`, `requirements.txt`) for insecure dependencies. It even suggests the exact version to upgrade to to fix the bug.' },
+              { type: 'summary', points: ['Scans open-source dependencies in 50+ languages', 'Integrates with GitHub to comment on Pull Requests', 'Identifies license compliance issues (unwanted legal risks)'] }
+            ]
+          },
+          {
+            id: 'l_sec_iac', title: 'IaC Security (Checkov)', duration: '10 min', difficulty: 'Advanced', content: [
+              { type: 'concept', body: 'If you use Terraform or CloudFormation to build your servers, you can have "Insecure Infrastructure" (like an open S3 bucket). IaC Security tools scan your code *before* you build the servers.' },
+              { type: 'code', language: 'bash', code: '# ─── Scanning Terraform code ───\ncheckov -d ./terraform-folder' },
+              { type: 'summary', points: ['Prevents misconfigured cloud resources', 'Enforces best practices (e.g., "Must have encryption enabled")', 'Cheaper to fix code than to fix a running database'] }
+            ]
+          },
+          {
+            id: 'l_sec_best', title: 'Best Practices', duration: '8 min', difficulty: 'Advanced', content: [
+              { type: 'concept', body: 'DevSecOps is not just tools — it\'s a set of principles that keep your company safe while moving fast.' },
+              { type: 'summary', points: ['LEAST PRIVILEGE: Everyone (and every service) should have the minimum access needed.', 'ZERO TRUST: Never assume something inside your network is safe.', 'IMMUTABLE INFRASTRUCTURE: Never fix things on a running server — build a new secure one instead.'] }
+            ]
+          }
+        ]
+      }
     ]
   }
 };
 
 export const allLessons = Object.values(modules).flatMap(mod => mod.sections.flatMap(s => s.lessons));
 export const totalLessons = allLessons.length;
+

@@ -2,12 +2,7 @@ import { Flame, BookOpen, Clock, Activity, ArrowRight, Lock, CheckCircle2, GitBr
 import { modules, totalLessons } from '../data/lessons';
 import { ProgressBar, Badge } from '../components/SharedComponents';
 
-const comingSoonModules = [
-  { icon: '🐳', title: 'Docker & Containers', desc: 'Build, ship, and run anywhere' },
-  { icon: '☸️', title: 'Kubernetes', desc: 'Orchestrate containers at scale' },
-  { icon: '📊', title: 'Monitoring', desc: 'Prometheus, Grafana, alerting' },
-  { icon: '🔐', title: 'DevSecOps', desc: 'Security in every pipeline' },
-];
+const comingSoonModules = [];
 
 export default function DashboardPage({ onNavigate, completedLessons }) {
   const percent = Math.round((completedLessons.length / totalLessons) * 100);
@@ -69,18 +64,9 @@ export default function DashboardPage({ onNavigate, completedLessons }) {
                   </div>
                 </div>
                 <div className="flex flex-wrap gap-1.5 mb-4">
-                  {mod.id === 'git' ? (
-                    <>
-                      <Badge label="Git" variant="beginner" />
-                      <Badge label="GitHub" variant="beginner" />
-                      <Badge label="Beginner → Advanced" variant="intermediate" />
-                    </>
-                  ) : (
-                    <>
-                      <Badge label="Actions" variant="beginner" />
-                      <Badge label="Pipelines" variant="intermediate" />
-                    </>
-                  )}
+                  {mod.badges && mod.badges.map((b, i) => (
+                    <Badge key={i} label={b.label} variant={b.variant} />
+                  ))}
                 </div>
                 <ProgressBar percent={modPercent} />
                 <p className="text-xs text-gray-500 mt-2">{modCompleted} of {modTotal} lessons completed</p>

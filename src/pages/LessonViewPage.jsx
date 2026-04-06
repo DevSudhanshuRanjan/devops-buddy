@@ -1,6 +1,6 @@
 import { ChevronRight, ArrowLeft, ArrowRight, CheckCircle2, Clock, BookOpen } from 'lucide-react';
 import { modules, allLessons } from '../data/lessons';
-import { CodeBlock, Callout, DiagramBlock, Badge } from '../components/SharedComponents';
+import { CodeBlock, Callout, DiagramBlock, Badge, QuestionBlock } from '../components/SharedComponents';
 
 function ContentRenderer({ block }) {
   switch (block.type) {
@@ -35,19 +35,32 @@ function ContentRenderer({ block }) {
           </ul>
         </div>
       );
+    case 'open_question':
+      return <QuestionBlock question={block.question} placeholder={block.placeholder} />;
     default:
       return <p className="text-gray-300 text-sm my-2">{block.body || ''}</p>;
   }
 }
 
 export default function LessonViewPage({ lessonId, onNavigate, completedLessons, onComplete }) {
-  const mod = modules.git;
-  let currentLesson = null;
+  // Find the module and section for this lesson
+  let currentModule = null;
   let currentSection = null;
-  for (const sec of mod.sections) {
-    const found = sec.lessons.find(l => l.id === lessonId);
-    if (found) { currentLesson = found; currentSection = sec; break; }
+  let currentLesson = null;
+
+  for (const mod of Object.values(modules)) {
+    for (const sec of mod.sections) {
+      const found = sec.lessons.find(l => l.id === lessonId);
+      if (found) {
+        currentModule = mod;
+        currentSection = sec;
+        currentLesson = found;
+        break;
+      }
+    }
+    if (currentLesson) break;
   }
+
   if (!currentLesson) return <div className="text-gray-400 p-8">Lesson not found.</div>;
 
   const lessonIdx = allLessons.findIndex(l => l.id === lessonId);
@@ -61,7 +74,7 @@ export default function LessonViewPage({ lessonId, onNavigate, completedLessons,
       <div className="flex items-center gap-1.5 text-xs text-gray-500 mb-6 flex-wrap">
         <button onClick={() => onNavigate('module')} className="hover:text-gray-300 transition-colors cursor-pointer">Modules</button>
         <ChevronRight size={12} />
-        <button onClick={() => onNavigate('module')} className="hover:text-gray-300 transition-colors cursor-pointer">{mod.title}</button>
+        <button onClick={() => onNavigate('module')} className="hover:text-gray-300 transition-colors cursor-pointer">{currentModule.title}</button>
         <ChevronRight size={12} />
         <span className="text-gray-400">{currentSection.title}</span>
         <ChevronRight size={12} />
