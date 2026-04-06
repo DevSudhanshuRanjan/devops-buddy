@@ -3,7 +3,6 @@ import { modules, totalLessons } from '../data/lessons';
 import { ProgressBar, Badge } from '../components/SharedComponents';
 
 const comingSoonModules = [
-  { icon: '⚙️', title: 'CI/CD Pipelines', desc: 'GitHub Actions, Jenkins, ArgoCD' },
   { icon: '🐳', title: 'Docker & Containers', desc: 'Build, ship, and run anywhere' },
   { icon: '☸️', title: 'Kubernetes', desc: 'Orchestrate containers at scale' },
   { icon: '📊', title: 'Monitoring', desc: 'Prometheus, Grafana, alerting' },
@@ -11,7 +10,6 @@ const comingSoonModules = [
 ];
 
 export default function DashboardPage({ onNavigate, completedLessons }) {
-  const mod = modules.git;
   const percent = Math.round((completedLessons.length / totalLessons) * 100);
   const streak = Math.max(3, Math.min(completedLessons.length, 7));
 
@@ -54,28 +52,45 @@ export default function DashboardPage({ onNavigate, completedLessons }) {
       <div>
         <h2 className="text-lg font-bold text-white mb-4">Your Modules</h2>
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
-          <div className="bg-gray-900 rounded-xl border border-gray-700/50 border-l-4 border-l-indigo-500 p-5 hover:-translate-y-0.5 transition-all duration-200 col-span-1">
-            <div className="flex items-start justify-between mb-3">
-              <div className="flex items-center gap-3">
-                <span className="text-2xl">{mod.icon}</span>
-                <div>
-                  <h3 className="text-base font-bold text-white">{mod.title}</h3>
-                  <p className="text-xs text-gray-400">{mod.description}</p>
+          {Object.values(modules).map((mod, index) => {
+            const modTotal = mod.sections.flatMap(s => s.lessons).length;
+            const modCompleted = mod.sections.flatMap(s => s.lessons).filter(l => completedLessons.includes(l.id)).length;
+            const modPercent = modTotal > 0 ? Math.round((modCompleted / modTotal) * 100) : 0;
+            
+            return (
+              <div key={mod.id} className={`bg-gray-900 rounded-xl border border-gray-700/50 border-l-4 ${index === 0 ? 'border-l-indigo-500' : 'border-l-emerald-500'} p-5 hover:-translate-y-0.5 transition-all duration-200 col-span-1`}>
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl">{mod.icon}</span>
+                    <div>
+                      <h3 className="text-base font-bold text-white">{mod.title}</h3>
+                      <p className="text-xs text-gray-400">{mod.description}</p>
+                    </div>
+                  </div>
                 </div>
+                <div className="flex flex-wrap gap-1.5 mb-4">
+                  {mod.id === 'git' ? (
+                    <>
+                      <Badge label="Git" variant="beginner" />
+                      <Badge label="GitHub" variant="beginner" />
+                      <Badge label="Beginner → Advanced" variant="intermediate" />
+                    </>
+                  ) : (
+                    <>
+                      <Badge label="Actions" variant="beginner" />
+                      <Badge label="Pipelines" variant="intermediate" />
+                    </>
+                  )}
+                </div>
+                <ProgressBar percent={modPercent} />
+                <p className="text-xs text-gray-500 mt-2">{modCompleted} of {modTotal} lessons completed</p>
+                <button onClick={() => onNavigate('module')}
+                  className={`mt-4 w-full flex items-center justify-center gap-2 ${index === 0 ? 'bg-indigo-500 hover:bg-indigo-600 shadow-indigo-500/20' : 'bg-emerald-600 hover:bg-emerald-700 shadow-emerald-500/20'} text-white text-sm font-medium py-2.5 rounded-lg transition-all duration-200 hover:shadow-lg cursor-pointer`}>
+                  {modCompleted > 0 ? 'Continue Learning' : 'Start Learning'} <ArrowRight size={16} />
+                </button>
               </div>
-            </div>
-            <div className="flex flex-wrap gap-1.5 mb-4">
-              <Badge label="Git" variant="beginner" />
-              <Badge label="GitHub" variant="beginner" />
-              <Badge label="Beginner → Advanced" variant="intermediate" />
-            </div>
-            <ProgressBar percent={percent} />
-            <p className="text-xs text-gray-500 mt-2">{completedLessons.length} of {totalLessons} lessons completed</p>
-            <button onClick={() => onNavigate('module')}
-              className="mt-4 w-full flex items-center justify-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-medium py-2.5 rounded-lg transition-all duration-200 hover:shadow-lg hover:shadow-indigo-500/20 cursor-pointer">
-              {completedLessons.length > 0 ? 'Continue Learning' : 'Start Learning'} <ArrowRight size={16} />
-            </button>
-          </div>
+            );
+          })}
 
           {comingSoonModules.map((m, i) => (
             <div key={i} className="bg-gray-900 rounded-xl border border-gray-700/50 p-5 opacity-50 relative">

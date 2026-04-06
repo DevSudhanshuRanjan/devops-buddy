@@ -153,8 +153,44 @@ export const modules = {
         ]}
       ]}
     ]
+  },
+  cicd: {
+    id: 'cicd', title: 'CI/CD Pipelines', description: 'Automate your testing, build, and deployment workflows', icon: '⚙️',
+    sections: [
+      { id: 'sec1_cicd', title: 'Introduction to CI/CD', lessons: [
+        { id: 'l_cicd1', title: 'What is CI/CD?', duration: '7 min', difficulty: 'Beginner', content: [
+          { type: 'concept', body: 'CI/CD stands for Continuous Integration and Continuous Deployment (or Delivery). It is a set of practices that automate the process of integrating code changes, running tests, and deploying applications to production safely and quickly.' },
+          { type: 'analogy', body: 'Think of CI/CD like an automated car assembly line. Instead of humans carrying parts around and manually verifying every bolt, robots assemble the car, run safety checks, and roll it out to the dealership automatically.' },
+          { type: 'diagram', title: 'The CI/CD Pipeline', content: 'CODE → PUSH → BUILD (CI) → TEST (CI) → DEPLOY (CD) → MONITOR' },
+          { type: 'summary', points: ['CI ensures code integrates without breaking existing features.', 'CD ensures verified code is deployed to users effortlessly.', 'Removes human error and slow manual processes.'] }
+        ]},
+        { id: 'l_cicd2', title: 'Why is CI/CD Important?', duration: '5 min', difficulty: 'Beginner', content: [
+          { type: 'concept', body: 'Without CI/CD, deployment is a scary, manual event that usually happens late at night. Teams face "integration hell" where merges break everything.' },
+          { type: 'callout', variant: 'mistake', body: 'Manual deployments: Human errors, undocumented deployment steps, code sitting idle for weeks waiting for a release day.' },
+          { type: 'concept', body: 'With CI/CD, changes are merged frequently in small chunks. Bugs are caught immediately by automated tests. Deployments become boring, button-clicking routines instead of stressful events.' },
+          { type: 'callout', variant: 'tip', body: 'A good CI/CD pipeline gives developers the confidence to merge code on a Friday afternoon.' }
+        ]}
+      ]},
+      { id: 'sec2_cicd', title: 'Core Concepts & Workflow', lessons: [
+        { id: 'l_cicd3', title: 'Basic Workflow Explanation', duration: '8 min', difficulty: 'Intermediate', content: [
+          { type: 'concept', body: 'A pipeline is composed of stages. It starts when a developer pushes code to version control (like Git). The pipeline automatically takes over from there.' },
+          { type: 'diagram', title: 'Standard Workflow', content: '1. Commit: Dev pushes code to feature branch\n2. CI Build: Server grabs code, installs dependencies\n3. CI Test: Unit and Integration tests run\n4. Merge: PR approved and merged to main\n5. CD Deploy: Main branch is deployed to staging/prod' },
+          { type: 'concept', body: 'The pipeline acts as a merciless gatekeeper. If any step fails (e.g., tests fail, build errors), the pipeline stops immediately, and the team is notified. This prevents bad code from reaching users.' }
+        ]}
+      ]},
+      { id: 'sec3_cicd', title: 'CI/CD Tools ecosystem', lessons: [
+        { id: 'l_cicd4', title: 'Popular Tools: Actions, Jenkins, etc.', duration: '10 min', difficulty: 'Intermediate', content: [
+          { type: 'concept', body: 'There are many tools available to build CI/CD pipelines. They all generally execute scripts dynamically inside temporary virtual servers or containers.' },
+          { type: 'concept', body: 'GitHub Actions: Built directly into GitHub. Extremely popular for modern web development. Trigger workflows based on GitHub events (pull request, push, issue creation).' },
+          { type: 'concept', body: 'Jenkins: The legacy open-source heavyweight. Extremely customizable, huge plugin ecosystem, but requires you to manage your own server.' },
+          { type: 'concept', body: 'GitLab CI/CD: Highly integrated if you use GitLab. Known for its powerful configuration features.' },
+          { type: 'callout', variant: 'tip', body: 'If starting a fresh project on GitHub, GitHub Actions is the easiest and most powerful way to learn CI/CD.' },
+          { type: 'code', language: 'yaml', code: '# ─── Basic GitHub Actions Workflow (.github/workflows/main.yml) ───\nname: CI Pipeline\non: [push]\njobs:\n  build:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v3\n      - name: Run Tests\n        run: npm test' }
+        ]}
+      ]}
+    ]
   }
 };
 
-export const allLessons = modules.git.sections.flatMap(s => s.lessons);
+export const allLessons = Object.values(modules).flatMap(mod => mod.sections.flatMap(s => s.lessons));
 export const totalLessons = allLessons.length;
