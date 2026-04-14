@@ -1,5 +1,5 @@
 import { ArrowRight, CheckCircle2, Circle } from 'lucide-react';
-import { modules, totalLessons } from '../data/lessons';
+import { modules } from '../data/lessons';
 import { ProgressBar, Badge } from '../components/SharedComponents';
 
 export default function ModuleOverviewPage({ onNavigate, completedLessons }) {

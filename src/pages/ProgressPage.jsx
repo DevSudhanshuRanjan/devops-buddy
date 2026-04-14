@@ -68,7 +68,7 @@ export default function ProgressPage({ completedLessons }) {
         <div className="bg-gray-900 rounded-xl border border-gray-700/50 p-5">
           <h3 className="text-sm font-bold text-white mb-4">Section Breakdown</h3>
           <div className="space-y-4">
-            {mod.sections.map((sec, i) => {
+            {mod.sections.map((sec) => {
               const done = sec.lessons.filter(l => completedLessons.includes(l.id)).length;
               const secPct = sec.lessons.length > 0 ? Math.round((done / sec.lessons.length) * 100) : 0;
               return (

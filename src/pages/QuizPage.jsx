@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { CheckCircle2, XCircle, RotateCcw, ArrowRight, HelpCircle } from 'lucide-react';
 import { quizQuestions } from '../data/quiz';
 

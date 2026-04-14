@@ -1,11 +1,10 @@
 import { Flame, BookOpen, Clock, Activity, ArrowRight, Lock, CheckCircle2, GitBranch, ChevronRight } from 'lucide-react';
-import { modules, totalLessons } from '../data/lessons';
+import { modules } from '../data/lessons';
 import { ProgressBar, Badge } from '../components/SharedComponents';
 
 const comingSoonModules = [];
 
 export default function DashboardPage({ onNavigate, completedLessons }) {
-  const percent = Math.round((completedLessons.length / totalLessons) * 100);
   const streak = Math.max(3, Math.min(completedLessons.length, 7));
 
   const recentActivity = [

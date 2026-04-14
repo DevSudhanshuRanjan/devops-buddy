@@ -12,7 +12,9 @@ function loadState() {
   try {
     const saved = localStorage.getItem('devops-buddy-state');
     if (saved) return JSON.parse(saved);
-  } catch (e) {}
+  } catch {
+    // ignore
+  }
   return null;
 }
 
@@ -31,7 +33,9 @@ export default function App() {
       localStorage.setItem('devops-buddy-state', JSON.stringify({
         currentPage, currentLesson, completedLessons, quizAnswers, quizSubmitted
       }));
-    } catch (e) {}
+    } catch {
+      // ignore
+    }
   }, [currentPage, currentLesson, completedLessons, quizAnswers, quizSubmitted]);
 
   const navigate = (page, lessonId = null) => {
