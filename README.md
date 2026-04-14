@@ -1,16 +1,46 @@
-# React + Vite
+# DEVOPS BUDDY
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+![CI/CD
+Pipeline](https://github.com/USERNAME/REPO/actions/workflows/ci.yml/badge.svg)
+## Problem Statement
+[Short paragraph: What does this project do? What problem does it solve?
+Ask your partner for the project description.]
+## Architecture Diagram
+![Architecture Diagram](docs/architecture.png)
+## CI/CD Pipeline Explanation
+This project uses GitHub Actions for automated CI/CD.
+### Pipeline Stages:
+| Stage | Description | Trigger |
+|--------|------------------------------------------|-----------------|
+| Build | Install dependencies, compile project | Every push/PR |
+| Test | Run tests and lint checks | After build |
+| Deploy | Notify deployment (Vercel auto-deploys) | Only on main |
+### Pipeline Triggers:
+- Runs on every push to `main` branch
+- Runs on every Pull Request targeting `main`
+## Git Workflow
+- `main` branch: production-ready code only
+- `feature/*` branches: development work
+- All changes merged via Pull Requests
+- Minimum 5 commits with meaningful messages
+## Tools Used
+| Tool | Purpose |
+|----------------|----------------------------|
+| GitHub Actions | CI/CD automation |
+| Vercel | Frontend deployment |
+| Node.js | Runtime environment |
+| Git | Version control |
+| GitHub Secrets | Secure credential storage |
+## Screenshots
+### Pipeline Success
+![Pipeline Success](docs/pipeline-success.png)
+### Deployment Output
+Live URL: [https://your-vercel-url.vercel.app]
+![Deployment](docs/deployment-screenshot.png)
+## Challenges Faced
+1. **[Challenge 1]**: [Description and how you solved it]
+2. **[Challenge 2]**: [Description and how you solved it]
+3. **[Challenge 3]**: [Description and how you solved it]
+## Team
+- Sudhanshu Ranjan — Frontend & Backend Development, Deployment
+- Vaishnavi Joshi — CI/CD Pipeline, GitHub Actions, Documentation
