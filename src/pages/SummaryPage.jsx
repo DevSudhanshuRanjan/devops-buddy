@@ -1,5 +1,5 @@
 import { Award, ArrowRight, Download, Bell, CheckCircle2 } from 'lucide-react';
-import { modules, totalLessons } from '../data/lessons';
+import { modules } from '../data/lessons';
 import { quizQuestions } from '../data/quiz';
 import { Badge } from '../components/SharedComponents';
 
