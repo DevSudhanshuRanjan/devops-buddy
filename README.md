@@ -2,6 +2,10 @@
 
 DevOps Buddy is an interactive, modern, and engaging web-based learning platform designed to teach DevOps practices like Git, GitHub, continuous integration, and continuous deployment (CI/CD). Built with a highly responsive and sleek dark-mode UI, it guides users through curriculum modules, quizzes, and tracks real-time progress.
 
+## 👥 Team
+- **Sudhanshu Ranjan** — Frontend & Backend Development, Deployment
+- **Vaishnavi Joshi** — CI/CD Pipeline, GitHub Actions, Documentation
+
 ## 🎯 Features
 
 - **Interactive Modules & Lessons:** Bite-sized lessons covering essential DevOps concepts.
@@ -18,32 +22,50 @@ DevOps Buddy is an interactive, modern, and engaging web-based learning platform
 
 ### 1. Dashboard Overview
 ![Dashboard View](./public/screenshots/dashboard.png)
-*(A view of the dashboard highlighting progress bars, streak tracking, and recent activity.)*
 
 ### 2. Module & Lessons View
 ![Lesson View](./public/screenshots/lesson.png)
-*(A screenshot showing the lesson reading interface with sidebars and navigation.)*
 
 ### 3. Interactive Quiz
 ![Quiz Interface](./public/screenshots/quiz.png)
-*(A view of the quiz test interface and score summaries.)*
 
 ---
 
 ## 🛠️ Technology Stack
 
-- **Frontend:** [React 19](https://react.dev/)
-- **Build Tool:** [Vite](https://vitejs.dev/)
-- **Styling:** [Tailwind CSS v4](https://tailwindcss.com/)
-- **Icons:** [Lucide React](https://lucide.dev/)
-- **CI/CD:** GitHub Actions & Vercel Auto-deploy
+| Tool | Purpose |
+|----------------|----------------------------|
+| Frontend | React 19, Tailwind CSS v4, Lucide React, Vite |
+| GitHub Actions| CI/CD automation |
+| Vercel | Frontend deployment |
+| Node.js | Runtime environment |
+| Git | Version control |
+| GitHub Secrets| Secure credential storage |
+
+---
+
+## 🚀 CI/CD Pipeline Explanation
+This project uses GitHub Actions for automated CI/CD.
+
+### Pipeline Stages:
+| Stage | Description | Trigger |
+|--------|------------------------------------------|-----------------|
+| Build | Install dependencies, compile project | Every push/PR on all branches |
+| Test | Run tests and lint checks | After build |
+| Deploy | Notify deployment (Vercel auto-deploys) | Only on main |
+
+### Git Workflow
+- `main` branch: production-ready code only
+- `feature/*` branches: development work
+- All changes merged via Pull Requests
+- Minimum 5 commits with meaningful messages
 
 ---
 
 ## 💻 Running Locally
 
 ### Prerequisites
-Make sure you have [Node.js](https://nodejs.org/) (Wait, Version 20 or higher recommended) installed on your system.
+Make sure you have [Node.js](https://nodejs.org/) (Version 20 or higher recommended) installed on your system.
 
 ### Installation
 
@@ -67,12 +89,10 @@ Make sure you have [Node.js](https://nodejs.org/) (Wait, Version 20 or higher re
 
 ---
 
-## 🚀 CI/CD Pipeline
-
-The project features an automated GitHub Actions pipeline located in `.github/workflows/ci.yml` that triggers on all branches.
-- **Lint Check:** Automatically lints the code using ESLint to enforce best practices.
-- **Build Test:** Validates that the application compiles correctly.
-- **Vercel Deployment:** Automatically deploys successfully built changes.
+## 💡 Challenges Faced
+1. **Pipeline Execution Blocked:** Solved a typo with the GitHub Actions directory (`.github/workflow` converted to `workflows`).
+2. **Node.js Backward Compatibility:** Found out modern tools like Vite and Tailwind v4 crash with older Node instances; fixed CI execution under Node v24.
+3. **Rigorous Linters Enforcement:** Eliminated 12 unused variables across components to strictly pass GitHub Actions integration checks natively.
 
 ---
 
