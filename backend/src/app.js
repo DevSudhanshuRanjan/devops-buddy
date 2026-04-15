@@ -115,9 +115,12 @@ app.use((req, res) => {
 app.use(errorHandler);
 
 // ─── Start Server ─────────────────────────────────────────────────────────
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`🚀 DevOps Buddy API running on port ${PORT} [${process.env.NODE_ENV}]`);
-});
+// Vercel loads this file as a serverless function, so only listen when running locally.
+if (process.env.VERCEL !== '1') {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => {
+    console.log(`🚀 DevOps Buddy API running on port ${PORT} [${process.env.NODE_ENV}]`);
+  });
+}
 
 module.exports = app; // export for testing
