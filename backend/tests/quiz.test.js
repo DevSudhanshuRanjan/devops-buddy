@@ -5,8 +5,17 @@ const mongoose = require('mongoose');
 beforeAll(async () => {
   if (mongoose.connection.readyState !== 1) {
     await new Promise((resolve) => {
-      mongoose.connection.once('connected', resolve);
-      setTimeout(resolve, 10000);
+      const onConnected = () => {
+        clearTimeout(timeoutId);
+        resolve();
+      };
+
+      mongoose.connection.once('connected', onConnected);
+
+      const timeoutId = setTimeout(() => {
+        mongoose.connection.off('connected', onConnected);
+        resolve();
+      }, 10000);
     });
   }
 });

@@ -1,9 +1,19 @@
 import { useState } from 'react';
-import { Search, Bell, Menu, X, ChevronDown, ChevronRight, Home, BookOpen, BarChart3, Settings, CheckCircle2, Circle, LogOut, Zap } from 'lucide-react';
+import { Search, Bell, Menu, X, ChevronDown, ChevronRight, Home, BookOpen, BarChart3, Settings, CheckCircle2, Circle, LogOut, Zap, UserRound } from 'lucide-react';
 import { modules } from '../data/lessons';
 import { ProgressBar } from './SharedComponents';
 
-export function TopNavBar({ onNavigate, mobileMenuOpen, setMobileMenuOpen }) {
+function getInitials(name) {
+  if (!name) return 'DB';
+  return name
+    .split(' ')
+    .map((part) => part[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase();
+}
+
+export function TopNavBar({ onNavigate, mobileMenuOpen, setMobileMenuOpen, user, onLogout }) {
   return (
     <header className="fixed top-0 right-0 left-0 lg:left-64 h-16 bg-gray-900/80 backdrop-blur-xl border-b border-gray-700/50 z-40 flex items-center justify-between px-4 lg:px-6 transition-all duration-300">
       <div className="flex items-center gap-3">
@@ -22,9 +32,21 @@ export function TopNavBar({ onNavigate, mobileMenuOpen, setMobileMenuOpen }) {
           <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-indigo-500 rounded-full animate-pulse" />
         </button>
         <div className="h-8 w-px bg-gray-700" />
-        <button onClick={() => onNavigate('dashboard')} className="flex items-center gap-2 cursor-pointer hover:bg-gray-800 rounded-lg px-2 py-1.5 transition-colors">
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-xs font-bold">DB</div>
-          <span className="hidden sm:block text-sm text-gray-300 font-medium">Engineer</span>
+        <button onClick={() => onNavigate('profile')} className="flex items-center gap-2 cursor-pointer hover:bg-gray-800 rounded-lg px-2 py-1.5 transition-colors">
+          {user?.avatar ? (
+            <img src={user.avatar} alt={user.displayName} className="w-8 h-8 rounded-full object-cover" />
+          ) : (
+            <div className="w-8 h-8 rounded-full bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-xs font-bold">
+              {getInitials(user?.displayName)}
+            </div>
+          )}
+          <span className="hidden sm:block text-sm text-gray-300 font-medium">{user?.displayName || 'Engineer'}</span>
+        </button>
+        <button
+          onClick={onLogout}
+          className="flex items-center gap-2 px-3 py-2 rounded-lg border border-gray-700 text-xs text-gray-300 hover:text-white hover:border-gray-500 transition-colors cursor-pointer"
+        >
+          <LogOut size={14} /> Logout
         </button>
       </div>
     </header>
@@ -47,6 +69,7 @@ export function Sidebar({ onNavigate, currentPage, currentLesson, completedLesso
     { id: 'dashboard', label: 'Dashboard', icon: Home },
     { id: 'module', label: 'Modules', icon: BookOpen },
     { id: 'progress', label: 'Progress', icon: BarChart3 },
+    { id: 'profile', label: 'Profile', icon: UserRound },
   ];
 
   const sidebarClasses = mobileMenuOpen
@@ -59,7 +82,7 @@ export function Sidebar({ onNavigate, currentPage, currentLesson, completedLesso
       <aside className={`${sidebarClasses} bg-gray-900 border-r border-gray-700/50 flex flex-col transition-transform duration-300`}>
         <div className="p-4 border-b border-gray-700/50">
           <button onClick={() => onNavigate('landing')} className="flex items-center gap-2.5 cursor-pointer group">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/20">
+            <div className="w-9 h-9 rounded-xl bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/20">
               <Zap size={18} className="text-white" />
             </div>
             <div>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { ArrowRight, Terminal, Users, Sparkles, ChevronRight, Lock, GitBranch, Workflow, Container, Ship, BarChart3, Shield, Zap } from 'lucide-react';
+import { ArrowRight, ChevronRight, Lock, Zap } from 'lucide-react';
 import { Badge } from '../components/SharedComponents';
+import { getBackendBaseUrl } from '../lib/api';
 
 const phrases = ['Scratch.', 'Day One.', 'Zero to Production.'];
 
@@ -31,7 +32,7 @@ function TypewriterText() {
   }, [charIdx, deleting, phraseIdx]);
 
   return (
-    <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">
+    <span className="text-transparent bg-clip-text bg-linear-to-r from-indigo-400 via-purple-400 to-pink-400">
       {phrases[phraseIdx].substring(0, charIdx)}
       <span className="animate-[blink_1s_infinite] text-indigo-400">|</span>
     </span>
@@ -55,12 +56,8 @@ const steps = [
   { label: 'Production', status: 'locked' },
 ];
 
-export default function LandingPage({ onNavigate }) {
-  const backendBaseUrl =
-    import.meta.env.VITE_BACKEND_URL?.replace(/\/$/, '') ||
-    (window.location.hostname === 'localhost'
-      ? 'http://localhost:5000'
-      : `${window.location.origin}/backend`);
+export default function LandingPage() {
+  const backendBaseUrl = getBackendBaseUrl();
 
   const startGoogleOAuth = () => {
     window.location.assign(`${backendBaseUrl}/auth/google`);
@@ -72,7 +69,7 @@ export default function LandingPage({ onNavigate }) {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0A0E1A]/80 backdrop-blur-xl border-b border-gray-800/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/20">
+            <div className="w-9 h-9 rounded-xl bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/20">
               <Zap size={18} className="text-white" />
             </div>
             <span className="text-lg font-bold text-white">DevOps Buddy</span>
@@ -113,7 +110,7 @@ export default function LandingPage({ onNavigate }) {
               className="group px-8 py-4 bg-indigo-500 hover:bg-indigo-600 text-white font-semibold rounded-xl transition-all duration-300 hover:shadow-2xl hover:shadow-indigo-500/25 hover:-translate-y-0.5 flex items-center gap-2 text-lg cursor-pointer">
               Start Learning Free <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
             </button>
-            <button onClick={() => onNavigate('module')}
+            <button onClick={startGoogleOAuth}
               className="px-8 py-4 border border-gray-600 hover:border-indigo-500 text-gray-300 hover:text-white font-semibold rounded-xl transition-all duration-300 hover:-translate-y-0.5 flex items-center gap-2 text-lg cursor-pointer">
               Explore Modules <ChevronRight size={20} />
             </button>
@@ -123,7 +120,7 @@ export default function LandingPage({ onNavigate }) {
           <div className="flex items-center justify-center gap-3 animate-[fade-in_1.4s_ease-out]">
             <div className="flex -space-x-2">
               {['from-blue-400 to-blue-600','from-green-400 to-green-600','from-yellow-400 to-orange-600','from-pink-400 to-rose-600','from-purple-400 to-indigo-600'].map((g,i) => (
-                <div key={i} className={`w-8 h-8 rounded-full bg-gradient-to-br ${g} border-2 border-[#0A0E1A] flex items-center justify-center text-[10px] text-white font-bold`}>
+                <div key={i} className={`w-8 h-8 rounded-full bg-linear-to-br ${g} border-2 border-[#0A0E1A] flex items-center justify-center text-[10px] text-white font-bold`}>
                   {['JD','AK','MR','SL','TW'][i]}
                 </div>
               ))}
@@ -164,7 +161,7 @@ export default function LandingPage({ onNavigate }) {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {features.map((f, i) => (
-              <div key={i} onClick={() => f.status === 'active' && onNavigate('module')}
+              <div key={i} onClick={() => f.status === 'active' && startGoogleOAuth()}
                 className={`group relative rounded-xl border p-6 transition-all duration-300 ${f.status === 'active' ? 'border-indigo-500/30 bg-gray-900/80 hover:-translate-y-1 hover:shadow-xl hover:shadow-indigo-500/10 cursor-pointer' : 'border-gray-700/30 bg-gray-900/40 opacity-60'}`}>
                 {f.status === 'coming-soon' && (
                   <div className="absolute top-3 right-3">
@@ -210,7 +207,7 @@ export default function LandingPage({ onNavigate }) {
       <footer className="border-t border-gray-800/50 py-12 px-4">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+            <div className="w-7 h-7 rounded-lg bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
               <Zap size={14} className="text-white" />
             </div>
             <span className="text-sm text-gray-400">© 2026 DevOps Buddy. Built for engineers.</span>

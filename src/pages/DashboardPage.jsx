@@ -1,11 +1,15 @@
-import { Flame, BookOpen, Clock, Activity, ArrowRight, Lock, CheckCircle2, GitBranch, ChevronRight } from 'lucide-react';
+import { Flame, BookOpen, Clock, Activity, ArrowRight, Lock, CheckCircle2 } from 'lucide-react';
 import { modules } from '../data/lessons';
 import { ProgressBar, Badge } from '../components/SharedComponents';
 
 const comingSoonModules = [];
 
-export default function DashboardPage({ onNavigate, completedLessons }) {
-  const streak = Math.max(3, Math.min(completedLessons.length, 7));
+export default function DashboardPage({ onNavigate, completedLessons, user, stats }) {
+  const streak = stats?.currentStreak ?? user?.streak?.current ?? Math.max(1, Math.min(completedLessons.length, 7));
+  const completedCount = stats?.completedLessons ?? completedLessons.length;
+  const learnedHours = stats?.estimatedMinutesSpent
+    ? (stats.estimatedMinutesSpent / 60).toFixed(1)
+    : (completedLessons.length * 0.12).toFixed(1);
 
   const recentActivity = [
     ...(completedLessons.includes('l1') ? [{ title: 'What is Version Control?', time: '2 hours ago', id: 'l1' }] : []),
@@ -16,24 +20,24 @@ export default function DashboardPage({ onNavigate, completedLessons }) {
     recentActivity.push({ title: 'Start your first lesson!', time: 'Get started now', id: null });
   }
 
-  const stats = [
+  const dashboardStats = [
     { icon: Flame, label: 'Day Streak', value: `${streak}-day`, color: 'text-orange-400' },
-    { icon: BookOpen, label: 'Lessons Completed', value: completedLessons.length, color: 'text-indigo-400' },
-    { icon: Clock, label: 'Hours Learned', value: `~${(completedLessons.length * 0.12).toFixed(1)} hrs`, color: 'text-emerald-400' },
+    { icon: BookOpen, label: 'Lessons Completed', value: completedCount, color: 'text-indigo-400' },
+    { icon: Clock, label: 'Hours Learned', value: `~${learnedHours} hrs`, color: 'text-emerald-400' },
     { icon: Activity, label: 'Current Module', value: 'Git', color: 'text-purple-400' },
   ];
 
   return (
     <div className="space-y-6 animate-[fade-in_0.3s_ease-out]">
       {/* Welcome */}
-      <div className="bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-pink-500/10 rounded-2xl border border-indigo-500/20 p-6">
-        <h1 className="text-2xl font-bold text-white mb-1">Welcome back, Engineer 👋</h1>
+      <div className="bg-linear-to-r from-indigo-500/10 via-purple-500/10 to-pink-500/10 rounded-2xl border border-indigo-500/20 p-6">
+        <h1 className="text-2xl font-bold text-white mb-1">Welcome back, {user?.displayName || 'Engineer'} 👋</h1>
         <p className="text-gray-400 text-sm">Keep up the momentum! You're making great progress.</p>
       </div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {stats.map((s, i) => (
+        {dashboardStats.map((s, i) => (
           <div key={i} className="bg-gray-900 rounded-xl border border-gray-700/50 p-4 hover:border-gray-600 transition-colors">
             <s.icon size={20} className={`${s.color} mb-2`} />
             <p className="text-xl font-bold text-white">{s.value}</p>

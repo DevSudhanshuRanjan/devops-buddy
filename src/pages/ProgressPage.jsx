@@ -2,12 +2,15 @@ import { Flame, CheckCircle2, Clock, BookOpen } from 'lucide-react';
 import { modules, allLessons, totalLessons } from '../data/lessons';
 import { ProgressBar } from '../components/SharedComponents';
 
-export default function ProgressPage({ completedLessons }) {
+export default function ProgressPage({ completedLessons, stats }) {
   const mod = modules.git;
-  const percent = totalLessons > 0 ? Math.round((completedLessons.length / totalLessons) * 100) : 0;
-  const remaining = totalLessons - completedLessons.length;
+  const completedCount = stats?.completedLessons ?? completedLessons.length;
+  const totalCount = stats?.totalLessons ?? totalLessons;
+  const percent = stats?.completionPercent ?? (totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0);
+  const remaining = Math.max(0, totalCount - completedCount);
+  const spentMinutes = stats?.estimatedMinutesSpent ?? completedCount * 7;
   const estHoursLeft = (remaining * 0.12).toFixed(1);
-  const streak = Math.max(3, Math.min(completedLessons.length, 7));
+  const streak = stats?.currentStreak ?? Math.max(1, Math.min(completedCount, 7));
 
   const radius = 70;
   const circumference = 2 * Math.PI * radius;
@@ -38,7 +41,7 @@ export default function ProgressPage({ completedLessons }) {
               <span className="text-xs text-gray-500">Complete</span>
             </div>
           </div>
-          <p className="text-sm text-gray-400">{completedLessons.length} of {totalLessons} lessons</p>
+          <p className="text-sm text-gray-400">{completedCount} of {totalCount} lessons</p>
           <div className="flex items-center gap-2 mt-3 bg-orange-900/20 px-3 py-1.5 rounded-full border border-orange-700/30">
             <Flame size={16} className="text-orange-400" />
             <span className="text-sm font-medium text-orange-300">{streak}-day streak</span>
@@ -52,7 +55,7 @@ export default function ProgressPage({ completedLessons }) {
               <Clock size={16} className="text-indigo-400" />
               <span className="text-sm font-medium text-white">Time Invested</span>
             </div>
-            <p className="text-2xl font-bold text-white ml-6">~{(completedLessons.length * 0.12).toFixed(1)} hrs</p>
+            <p className="text-2xl font-bold text-white ml-6">~{(spentMinutes / 60).toFixed(1)} hrs</p>
           </div>
           <div className="bg-gray-900 rounded-xl border border-gray-700/50 p-5">
             <div className="flex items-center gap-2 mb-1">

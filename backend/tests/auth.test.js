@@ -6,9 +6,18 @@ beforeAll(async () => {
   // Wait for the connection initiated in app.js
   if (mongoose.connection.readyState !== 1) {
     await new Promise((resolve) => {
-      mongoose.connection.once('connected', resolve);
+      const onConnected = () => {
+        clearTimeout(timeoutId);
+        resolve();
+      };
+
+      mongoose.connection.once('connected', onConnected);
+
       // Timeout after 10s
-      setTimeout(resolve, 10000);
+      const timeoutId = setTimeout(() => {
+        mongoose.connection.off('connected', onConnected);
+        resolve();
+      }, 10000);
     });
   }
 });
