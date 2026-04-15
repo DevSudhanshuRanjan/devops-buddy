@@ -15,7 +15,14 @@ const protect = require('../middleware/auth');
  *       302:
  *         description: Redirect to Google OAuth
  */
-router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'], session: false }));
+router.get(
+  '/google',
+  passport.authenticate('google', {
+    scope: ['profile', 'email'],
+    session: false,
+    prompt: 'select_account',
+  })
+);
 
 /**
  * @swagger

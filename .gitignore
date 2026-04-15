@@ -26,3 +26,7 @@ prompt.md
 .env
 DEPLOYMENT_GUIDE.md
 env.txt
+backend/.env
+backend/.env.example
+frontend/.env
+frontend/.env.example

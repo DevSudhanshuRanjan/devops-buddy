@@ -8,35 +8,30 @@ import QuizPage from './pages/QuizPage';
 import SummaryPage from './pages/SummaryPage';
 import ProgressPage from './pages/ProgressPage';
 
-function loadState() {
-  try {
-    const saved = localStorage.getItem('devops-buddy-state');
-    if (saved) return JSON.parse(saved);
-  } catch {
-    // ignore
-  }
-  return null;
-}
-
 export default function App() {
-  const saved = loadState();
-  const [currentPage, setCurrentPage] = useState(saved?.currentPage || 'landing');
-  const [currentLesson, setCurrentLesson] = useState(saved?.currentLesson || null);
-  const [completedLessons, setCompletedLessons] = useState(saved?.completedLessons || []);
-  const [quizAnswers, setQuizAnswers] = useState(saved?.quizAnswers || {});
-  const [quizSubmitted, setQuizSubmitted] = useState(saved?.quizSubmitted || false);
+  const initialPage = window.location.pathname.startsWith('/dashboard') ? 'dashboard' : 'landing';
+
+  const [currentPage, setCurrentPage] = useState(initialPage);
+  const [currentLesson, setCurrentLesson] = useState(null);
+  const [completedLessons, setCompletedLessons] = useState([]);
+  const [quizAnswers, setQuizAnswers] = useState({});
+  const [quizSubmitted, setQuizSubmitted] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [fadeIn, setFadeIn] = useState(true);
 
   useEffect(() => {
-    try {
-      localStorage.setItem('devops-buddy-state', JSON.stringify({
-        currentPage, currentLesson, completedLessons, quizAnswers, quizSubmitted
-      }));
-    } catch {
-      // ignore
+    // Remove stale client-side progress state from old builds.
+    localStorage.removeItem('devops-buddy-state');
+
+    // OAuth callback includes token in query string; remove it from URL after landing.
+    const url = new URL(window.location.href);
+    if (url.searchParams.has('token')) {
+      url.searchParams.delete('token');
+      const search = url.searchParams.toString();
+      const nextUrl = `${url.pathname}${search ? `?${search}` : ''}${url.hash}`;
+      window.history.replaceState({}, '', nextUrl);
     }
-  }, [currentPage, currentLesson, completedLessons, quizAnswers, quizSubmitted]);
+  }, []);
 
   const navigate = (page, lessonId = null) => {
     setFadeIn(false);

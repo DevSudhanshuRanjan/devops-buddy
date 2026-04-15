@@ -56,6 +56,16 @@ const steps = [
 ];
 
 export default function LandingPage({ onNavigate }) {
+  const backendBaseUrl =
+    import.meta.env.VITE_BACKEND_URL?.replace(/\/$/, '') ||
+    (window.location.hostname === 'localhost'
+      ? 'http://localhost:5000'
+      : `${window.location.origin}/backend`);
+
+  const startGoogleOAuth = () => {
+    window.location.assign(`${backendBaseUrl}/auth/google`);
+  };
+
   return (
     <div className="min-h-screen bg-[#0A0E1A] text-gray-50 overflow-hidden">
       {/* Nav */}
@@ -68,8 +78,8 @@ export default function LandingPage({ onNavigate }) {
             <span className="text-lg font-bold text-white">DevOps Buddy</span>
           </div>
           <div className="flex items-center gap-3">
-            <button onClick={() => onNavigate('dashboard')} className="hidden sm:block text-sm text-gray-400 hover:text-white transition-colors px-3 py-2 cursor-pointer">Sign In</button>
-            <button onClick={() => onNavigate('dashboard')} className="text-sm font-medium bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg transition-all duration-200 hover:shadow-lg hover:shadow-indigo-500/25 cursor-pointer">
+            <button onClick={startGoogleOAuth} className="hidden sm:block text-sm text-gray-400 hover:text-white transition-colors px-3 py-2 cursor-pointer">Sign In</button>
+            <button onClick={startGoogleOAuth} className="text-sm font-medium bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg transition-all duration-200 hover:shadow-lg hover:shadow-indigo-500/25 cursor-pointer">
               Get Started
             </button>
           </div>
@@ -99,7 +109,7 @@ export default function LandingPage({ onNavigate }) {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16 animate-[fade-in_1.2s_ease-out]">
-            <button onClick={() => onNavigate('dashboard')}
+            <button onClick={startGoogleOAuth}
               className="group px-8 py-4 bg-indigo-500 hover:bg-indigo-600 text-white font-semibold rounded-xl transition-all duration-300 hover:shadow-2xl hover:shadow-indigo-500/25 hover:-translate-y-0.5 flex items-center gap-2 text-lg cursor-pointer">
               Start Learning Free <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
             </button>
