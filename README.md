@@ -58,11 +58,6 @@ This project uses GitHub Actions as the CI pipeline and Vercel Git integration f
 - Git and GitHub
 
 # 7. Screenshots
-
-Place these screenshots inside the root screenshots folder:
-- screenshots/pipeline-success.png
-- screenshots/deployment-output.png
-
 ### Pipeline Success
 ![Pipeline Success](./screenshots/pipeline-success.png)
 
